@@ -1,16 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Saludo from './Saludo.js'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+
+// componentes
+import Home from './components/home';
+import NavigationBar from './layouts/navbar';
+import Games from './components/games';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-          <Saludo nombre="Federico"></Saludo>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <BrowserRouter>
+                <Routes>
+                    <Route path='/' element={<NavigationBar />}>
+                        <Route path='' element={<Home />} />
+                        <Route path='games' element={<Games />} />
+                        <Route path='*' element={<Navigate replace to="/" />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        </div>
+    );
 }
 
 export default App;
