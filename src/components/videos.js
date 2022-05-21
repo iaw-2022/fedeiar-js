@@ -1,29 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
 import { useParams, useLocation } from "react-router-dom";
 
 
 const Videos = () => {
 
-    let { game_id } = useParams();
-    let location = useLocation();
-    const state = location.state;
-    console.log(location);
-    console.log(state);
+    const { game_name } = useParams();
+    const location = useLocation();
+    const game_id = location.state.game_id;
     
     // Hooks
-    const [game, setGame] = useState([]);
     const [videos, setVideos] = useState([]);
 
     // Fetch
-    const URL_game = process.env.REACT_APP_API_URL+"/games/"+game_id;
     const URL_videos = process.env.REACT_APP_API_URL+"/videos/game/"+game_id;
     const getDataFromAPI = async() => {
-        let response = await fetch(URL_game);
-        const dataGame = await response.json();
-        response = await fetch(URL_videos);
+        let response = await fetch(URL_videos);
         const dataVideos = await response.json();
-        setGame(dataGame);
         setVideos(dataVideos)
     }
 
@@ -42,7 +34,7 @@ const Videos = () => {
 
     return(
         <div>
-             <h1>Videos of {game.game_name}</h1>
+             <h1>Videos of {game_name}</h1>
         </div>
     )
 }

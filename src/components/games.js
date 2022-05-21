@@ -96,7 +96,7 @@ class Games extends React.Component {
                         {
                             games.map( (game) =>
                                 <tr key={game.id}>
-                                    <td><Link to={"/games/"+game.id} state={{ name: "hola" }}> {game.game_name} </Link></td>
+                                    <td><Link to={"/games/"+game.game_name} state={{ game_id: game.id }}> {game.game_name} </Link></td>
                                 </tr>
                             )
                         }
