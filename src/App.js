@@ -2,9 +2,11 @@ import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 // componentes
-import Home from './components/home';
-import NavigationBar from './layouts/navbar';
-import Games from './components/games';
+import Home from './components/home.js';
+import NavigationBar from './layouts/navbar.js';
+import Games from './components/games.js';
+import About from './components/about.js';
+import Videos from './components/videos';
 
 function App() {
     return (
@@ -12,8 +14,10 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path='/' element={<NavigationBar />}>
-                        <Route path='' element={<Home />} />
+                        <Route index element={<Home />} />
                         <Route path='games' element={<Games />} />
+                        <Route path='games/:game_id' element={<Videos />}/>
+                        <Route path='about' element={<About />} />
                         <Route path='*' element={<Navigate replace to="/" />} />
                     </Route>
                 </Routes>

@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+section {
+    background-color: cadetblue;
+    min-height: 100vh;
+}
