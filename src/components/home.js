@@ -1,7 +1,9 @@
+import Header from "../layouts/header";
+
 const Home = () => {
     return(
         <div>
-            <h1>Home</h1>
+            <Header>Home</Header>
         </div>
     )
 }

@@ -1,7 +1,9 @@
+import Header from "../layouts/header";
+
 const About = () => {
     return(
         <div>
-            <h1>About</h1>
+            <Header>About</Header>
         </div>
     )
 }

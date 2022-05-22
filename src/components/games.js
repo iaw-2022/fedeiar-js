@@ -1,37 +1,134 @@
+import { Button, Table } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import { Container, Table } from "react-bootstrap";
+import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
+import Header from "../layouts/header";
 
 /* const Games = () => {
 
     // Hooks
+    
     const [games, setGames] = useState([]);
+    const [search, setSearch] = useState("");
 
     // Fetch
-    const URL = process.env.REACT_APP_API_URL+"/games"
-    const showData = async() => {
+    
+    const getDataFromAPI = async() => {
+        const URL = process.env.REACT_APP_API_URL+"/games";
         const response = await fetch(URL);
         const data = await response.json();
         setGames(data);
     }
 
     useEffect( () => {
-        showData();
+        getDataFromAPI();
     }, []);
 
-    // Columnas
+    // Search
+
+    const searcher = (event) => {
+        setSearch(event.target.value);
+    }
+
+    let searchedGames = !search ? games : games.filter( (game) => game.game_name.toLowerCase().includes(search.toLocaleLowerCase()) );
+
+    const paginationComponentOptions = {
+        selectAllRowsItem: true,
+    };
+
+    // Columns
 
     const columns = [
         {
-            name: "Game Name",
-            selector: row => row.game_name
+            name: <b className="display-5">All Available Games</b>,
+            selector: row => row.game_name,
+            cell: (game) => (
+                <Link to={"/games/"+game.game_name} state={{ game_id: game.id }}><Button variant="success">{game.game_name}</Button></Link>
+            ),
+            center: true,
+            
         }
     ]
+
+    // View
+
     return(
         <div>
-            <Container>
-                <h1>Games</h1>
-                <Table responsive striped bordered hover size="sm" variant="dark">
+            <Header>Games</Header>
+
+            <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4" />
+            
+            <DataTable 
+                theme="dark"
+                columns={columns}
+                data={searchedGames}
+                pagination
+                paginationComponentOptions={paginationComponentOptions}
+                // striped
+            />
+        </div>
+    );
+} */
+
+
+// SIN DATATABLE
+
+
+const Games = () => {
+
+    // Hooks
+    
+    const [games, setGames] = useState([]);
+    const [search, setSearch] = useState("");
+
+    // Fetch
+    
+    const getDataFromAPI = async() => {
+        const URL = process.env.REACT_APP_API_URL+"/games";
+        const response = await fetch(URL);
+        const data = await response.json();
+        setGames(data);
+    }
+
+    useEffect( () => {
+        getDataFromAPI();
+    }, []);
+
+    // Columns
+
+    const columns = [
+        {
+            name: <b className="display-5">All Available Games</b>,
+            selector: row => row.game_name,
+            cell: (game) => (
+                <Link to={"/games/"+game.game_name} state={{ game_id: game.id }}><Button variant="success">{game.game_name}</Button></Link>
+            ),
+            center: true,
+            
+        }
+    ]
+
+    // Search
+
+    const searcher = (event) => {
+        setSearch(event.target.value);
+    }
+
+    let searchedGames = !search ? games : games.filter( (game) => game.game_name.toLowerCase().includes(search.toLocaleLowerCase()) );
+
+    const paginationComponentOptions = {
+        selectAllRowsItem: true,
+    };
+
+    // View
+
+    return(
+        <div>
+            <Header>Games</Header>
+
+            <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4" />
+            
+                <Table responsive striped bordered hover variant="dark">
                     <thead>
                         <tr>
                             <th>Games</th>
@@ -39,20 +136,33 @@ import { Link } from "react-router-dom";
                     </thead>
                     <tbody>
                         {
-                            games.map( (game) =>
+                            searchedGames.map( (game) =>
                                 <tr key={game.id}>
-                                    <td><Link to={"/games/"+game.id}>{game.game_name}</Link></td>
+                                    <td><Link to={"/games/"+game.game_name} state={{ game_id: game.id }}> {game.game_name} </Link></td>
                                 </tr>
                             )
                         }
                     </tbody>
                 </Table>
-            </Container>
-        </div>;
-    )
+        </div>
+    );
 }
- */
-class Games extends React.Component {
+
+
+
+
+// CON CLASES
+
+
+
+
+
+
+
+
+
+
+/* class Games extends React.Component {
     state = {
         games: null,
         isLoaded: false
@@ -105,6 +215,6 @@ class Games extends React.Component {
             
         </div>);
     }
-}
+} */
 
 export default Games;
