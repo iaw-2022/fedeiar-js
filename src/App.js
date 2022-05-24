@@ -7,6 +7,7 @@ import NavigationBar from './layouts/navbar.js';
 import Games from './components/games.js';
 import About from './components/about.js';
 import Videos from './components/videos';
+import SingleVideo from './components/singleVideo';
 
 function App() {
     return (
@@ -17,6 +18,7 @@ function App() {
                         <Route index element={<Home />} />
                         <Route path='games' element={<Games />} />
                         <Route path='games/:game_name' element={<Videos />}/>
+                        <Route path='games/:game_name/:video_id' element={<SingleVideo />}/>
                         <Route path='about' element={<About />} />
                         <Route path='*' element={<Navigate replace to="/" />} />
                     </Route>

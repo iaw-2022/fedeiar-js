@@ -1,10 +1,10 @@
-import { Button, Table } from "react-bootstrap";
+import { Button, Container, Table } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 import Header from "../layouts/header";
 
-/* const Games = () => {
+const Games = () => {
 
     // Hooks
     
@@ -32,49 +32,54 @@ import Header from "../layouts/header";
 
     let searchedGames = !search ? games : games.filter( (game) => game.game_name.toLowerCase().includes(search.toLocaleLowerCase()) );
 
-    const paginationComponentOptions = {
-        selectAllRowsItem: true,
-    };
-
     // Columns
 
     const columns = [
         {
-            name: <b className="display-5">All Available Games</b>,
+            name: <b className="display-6">All Available Games</b>,
             selector: row => row.game_name,
             cell: (game) => (
                 <Link to={"/games/"+game.game_name} state={{ game_id: game.id }}><Button variant="success">{game.game_name}</Button></Link>
             ),
             center: true,
-            
         }
     ]
+
+    const paginationComponentOptions = {
+        selectAllRowsItem: true,
+    };
 
     // View
 
     return(
         <div>
-            <Header>Games</Header>
+            <Header><h1 className="display-3">Games</h1></Header>
 
-            <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4" />
-            
-            <DataTable 
-                theme="dark"
-                columns={columns}
-                data={searchedGames}
-                pagination
-                paginationComponentOptions={paginationComponentOptions}
-                // striped
-            />
+            <Container className="w-75">
+
+                <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4 w-25" />
+
+                <div>
+                    <DataTable
+                        theme="dark"
+                        columns={columns}
+                        data={searchedGames}
+                        pagination
+                        paginationComponentOptions={paginationComponentOptions}
+                        // striped
+                    />
+                </div>
+
+            </Container>
         </div>
     );
-} */
+}
 
 
 // SIN DATATABLE
 
 
-const Games = () => {
+/* const Games = () => {
 
     // Hooks
     
@@ -146,7 +151,7 @@ const Games = () => {
                 </Table>
         </div>
     );
-}
+} */
 
 
 
