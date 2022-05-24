@@ -1,4 +1,4 @@
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Tab, Tabs } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useParams, useLocation, Link } from "react-router-dom";
@@ -12,6 +12,7 @@ const Videos = () => {
 
     // Hooks
     const [videos, setVideos] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [show, setShow] = useState(false);
 
     // Fetch
@@ -23,9 +24,14 @@ const Videos = () => {
         }
         const game_id = location.state.game_id;
         */
-        const URL_videos = process.env.REACT_APP_API_URL + "/videos/game/" + game_name;
-        let response = await fetch(URL_videos);
-        const dataVideos = await response.json();
+        const URL_categories = process.env.REACT_APP_API_URL+"/categories/"+ game_name;
+        const responseCategories = await fetch(URL_categories);
+        const dataCategories = await responseCategories.json();
+        setCategories(dataCategories);
+
+        const URL_videos = process.env.REACT_APP_API_URL+"/videos/game/"+ game_name;
+        let responseVideos = await fetch(URL_videos);
+        const dataVideos = await responseVideos.json();
         dataVideos.sort((videoA, videoB) => videoA.completion_time_seconds - videoB.completion_time_seconds);
         setVideos(dataVideos)
     }
@@ -90,15 +96,31 @@ const Videos = () => {
         selectAllRowsItem: true,
     };
 
+    if(categories.length == 0){
+        return(
+            <Header><h2 className="display-5">Loading...</h2></Header>
+        )
+    }
+
     return (
         <div>
             <Header><h2 className="display-5">{game_name}</h2></Header>
 
-            <div className="float-start mb-3">
+            <div className="mb-3">
                 <Button variant="success" onClick={handleShow}>Submit Run</Button>
             </div>
 
-            <div className="w-75">
+            <div className="mb-3 float-start">
+                <Tabs defaultActiveKey={categories[0].category_id}>
+                    {categories.map( (category) => (
+                        <Tab key={category.id} eventKey={category.id} title={category.category_name}>
+
+                        </Tab>
+                    ))}
+                </Tabs>
+            </div>
+            
+            <div className="">
                 <DataTable
                     theme="dark"
                     columns={columns}
