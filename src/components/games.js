@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 import Header from "../layouts/header";
+import Body from "../layouts/body";
 
 const Games = () => {
 
     // Hooks
-    
     const [games, setGames] = useState([]);
     const [search, setSearch] = useState("");
 
@@ -39,7 +39,7 @@ const Games = () => {
             name: <b className="display-6">All Available Games</b>,
             selector: row => row.game_name,
             cell: (game) => (
-                <Link to={"/games/"+game.game_name} state={{ game_id: game.id }}><Button variant="success">{game.game_name}</Button></Link>
+                <Link to={"/games/"+game.id}><Button variant="success">{game.game_name}</Button></Link>
             ),
             center: true,
         }
@@ -55,23 +55,26 @@ const Games = () => {
         <div>
             <Header><h1 className="display-3">Games</h1></Header>
 
-            <Container className="w-75">
+            <Body>
+                <Container className="w-75">
 
-                <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4 w-25" />
+                    <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4 w-25" />
 
-                <div>
-                    <DataTable
-                        theme="dark"
-                        columns={columns}
-                        data={searchedGames}
-                        pagination
-                        paginationComponentOptions={paginationComponentOptions}
-                        // striped
-                    />
-                </div>
+                    <div>
+                        <DataTable
+                            theme="dark"
+                            columns={columns}
+                            data={searchedGames}
+                            pagination
+                            paginationComponentOptions={paginationComponentOptions}
+                            // striped
+                        />
+                    </div>
 
-            </Container>
+                </Container>
+            </Body>
         </div>
+        
     );
 }
 

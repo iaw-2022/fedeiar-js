@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useParams, useLocation, Link } from "react-router-dom";
 import Header from "../layouts/header";
+import Body from "../layouts/body";
 
 
 const Videos = () => {
 
-    const { game_name } = useParams();
-    //const location = useLocation();
+    const { game_id } = useParams();
 
     // Hooks
     const [videos, setVideos] = useState([]);
@@ -17,23 +17,16 @@ const Videos = () => {
 
     // Fetch
     const getDataFromAPI = async () => {
-        //PREGUNTAR
-        /*
-        if(location.state == null){
-            return;
-        }
-        const game_id = location.state.game_id;
-        */
-        const URL_categories = process.env.REACT_APP_API_URL+"/categories/"+ game_name;
+        const URL_categories = process.env.REACT_APP_API_URL+"/categories/"+ game_id;
         const responseCategories = await fetch(URL_categories);
         const dataCategories = await responseCategories.json();
         setCategories(dataCategories);
 
-        const URL_videos = process.env.REACT_APP_API_URL+"/videos/game/"+ game_name;
-        let responseVideos = await fetch(URL_videos);
-        const dataVideos = await responseVideos.json();
+        const URL_videos = process.env.REACT_APP_API_URL+"/videos/game/"+ game_id;
+        const responseVideos = await fetch(URL_videos);
+        let dataVideos = await responseVideos.json();
         dataVideos.sort((videoA, videoB) => videoA.completion_time_seconds - videoB.completion_time_seconds);
-        setVideos(dataVideos)
+        setVideos(dataVideos);
     }
 
     useEffect(() => {
@@ -49,20 +42,12 @@ const Videos = () => {
 
     const columns = [
         {
-            name: "id",
-            selector: row => row.id
-        },
-        {
-            name: "Users",
-            selector: row => row.user_id
-        },
-        {
-            name: "Game",
-            selector: row => row.game_name
+            name: "User",
+            selector: row => row.user_name
         },
         {
             name: "Category",
-            selector: row => row.category_id
+            selector: row => row.category_name
         },
         {
             name: "Time",
@@ -74,24 +59,11 @@ const Videos = () => {
         {
             name: "Go to Video",
             cell: (video) => (
-                <Link to={`/games/${game_name}/${video.id}`} ><Button variant="primary" size="sm">Watch</Button></Link>
+                <Link to={`/games/${game_id}/${video.id}`} ><Button variant="primary" size="sm">Watch</Button></Link>
             )
         }
     ]
 
-    /*
-    // PREGUNTAR
-    if(location.state == null){
-        return(<div>
-            <h2>
-                Error
-            </h2>
-            <p>
-                Don't access the videos of a game by URL, use the table defined in the Games section.
-            </p>
-        </div>)
-    }
-*/
     const paginationComponentOptions = {
         selectAllRowsItem: true,
     };
@@ -104,46 +76,51 @@ const Videos = () => {
 
     return (
         <div>
-            <Header><h2 className="display-5">{game_name}</h2></Header>
+            <Header><h2 className="display-5">{categories[0].game_name}</h2></Header>
 
-            <div className="mb-3">
-                <Button variant="success" onClick={handleShow}>Submit Run</Button>
-            </div>
+            <Body>
 
-            <div className="mb-3 float-start">
-                <Tabs defaultActiveKey={categories[0].category_id}>
-                    {categories.map( (category) => (
-                        <Tab key={category.id} eventKey={category.id} title={category.category_name}>
+                <div className="mb-3 text-start">
+                    <Button variant="success" onClick={handleShow}>Submit Run</Button>
+                </div>
 
-                        </Tab>
-                    ))}
-                </Tabs>
-            </div>
+              
+
+                <div className="">
+                    <Tabs defaultActiveKey={categories[0].category_id}>
+                        {categories.map( (category) => (
+                            <Tab key={category.id} eventKey={category.id} title={category.category_name}>
+                                <div>
+                                    <DataTable
+                                        theme="dark"
+                                        columns={columns}
+                                        data={videos}
+                                        pagination
+                                        paginationComponentOptions={paginationComponentOptions}
+                                        dense
+                                        defaultSortFieldId={5}
+                                        // striped
+                                    />
+                                </div>
+                            </Tab>
+                        ))}
+                    </Tabs>
+                </div>
+
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Error: unauthorized</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>You must be logged in for submitting a video.</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="danger" onClick={handleClose}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+            </Body>
             
-            <div className="">
-                <DataTable
-                    theme="dark"
-                    columns={columns}
-                    data={videos}
-                    pagination
-                    paginationComponentOptions={paginationComponentOptions}
-                    dense
-                    defaultSortFieldId={5}
-                    // striped
-                />
-            </div>
-
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Error: unauthorized</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>You must be logged in for submitting a video.</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="danger" onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </div>
     )
 }

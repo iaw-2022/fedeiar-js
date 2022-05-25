@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
+import Body from "../layouts/body";
 import Header from "../layouts/header";
 
 
 const SingleVideo = () => {
 
-    const { game_name, video_id } = useParams();
+    const { game_id, video_id } = useParams();
 
     // Hooks
     const [video, setVideo] = useState([]);
@@ -21,7 +22,6 @@ const SingleVideo = () => {
         dataVideo.link_video = "https://www.youtube.com/embed/"+youtube_id;
 
         setVideo(dataVideo);
-    
     }
 
     useEffect( () => {
@@ -31,27 +31,29 @@ const SingleVideo = () => {
 
     return(
         <div>
-            <Header><h2 className="display-5">{game_name}</h2></Header>
+            <Header><h2 className="display-5">{video.game_name}</h2></Header>
 
-            <div>
-                <iframe
-                    src={video.link_video}
-                    frameBorder="0"
-                    allowFullScreen   
-                    width="640" 
-                    height="360"
-                />
-            </div>
+            <Body>
+                <div>
+                    <iframe
+                        src={video.link_video}
+                        frameBorder="0"
+                        allowFullScreen   
+                        width="640" 
+                        height="360"
+                    />
+                </div>
 
-            <div>
-                <p className="text-start">Run done by: {video.user_id}</p>
-                <p className="text-start">Category: {video.category_id}</p>
-                <p className="text-start">Done in: {SecondsToTime(video.completion_time_seconds)}</p>
-            </div>
+                <div>
+                    <p className="text-start">Run done by: {video.user_name}</p>
+                    <p className="text-start">Category: {video.category_name}</p>
+                    <p className="text-start">Done in: {SecondsToTime(video.completion_time_seconds)}</p>
+                </div>
 
-            <hr></hr>
+                <hr></hr>
 
-            <Link to={`/games/${game_name}`} className="float-start"><Button variant="danger">Go back</Button></Link>
+                <Link to={`/games/${game_id}`} className="float-start"><Button variant="danger">Go back</Button></Link>
+            </Body>
         </div>
     );
 }

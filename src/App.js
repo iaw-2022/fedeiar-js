@@ -17,8 +17,8 @@ function App() {
                     <Route path='/' element={<NavigationBar />}>
                         <Route index element={<Home />} />
                         <Route path='games' element={<Games />} />
-                        <Route path='games/:game_name' element={<Videos />}/>
-                        <Route path='games/:game_name/:video_id' element={<SingleVideo />}/>
+                        <Route path='games/:game_id' element={<Videos />}/>
+                        <Route path='games/:game_id/:video_id' element={<SingleVideo />}/>
                         <Route path='about' element={<About />} />
                         <Route path='*' element={<Navigate replace to="/" />} />
                     </Route>
