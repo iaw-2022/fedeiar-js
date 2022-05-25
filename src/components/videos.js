@@ -34,7 +34,7 @@ const Videos = () => {
         setLoaded(true);
     }
 
-    const buildVideosOfCategories = () => {
+    const buildCategoriesWithVideos = () => {
         for(let category of categories){
             let categoryWithVideos = {"category_id": category.id, "category_name": category.category_name, "videos": []};
             categoriesWithVideos.push(categoryWithVideos);
@@ -72,11 +72,15 @@ const Videos = () => {
             selector: row => row.category_name
         },
         {
-            name: "Time",
+            name: "Completion Time",
             selector: row => row.completion_time_seconds,
             cell: (video) => (
                 SecondsToTime(video.completion_time_seconds)
             ),
+        },
+        {
+            name: "Date",
+            selector: row => new Date(row.created_at).toLocaleDateString({day: '2-digit', month: '2-digit', year: 'numeric'}),
         },
         {
             name: "Go to Video",
@@ -96,7 +100,7 @@ const Videos = () => {
         )
     }
 
-    buildVideosOfCategories();
+    buildCategoriesWithVideos();
 
     return (
         <div>
