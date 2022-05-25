@@ -9,11 +9,14 @@ import Body from "../layouts/body";
 const Videos = () => {
 
     const { game_id } = useParams();
+    let categoriesWithVideos = [];
 
     // Hooks
     const [videos, setVideos] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [show, setShow] = useState(false);
+    //const [videosOfCatgories, setVideosOfCategories] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [isLoaded, setLoaded] = useState(false);
 
     // Fetch
     const getDataFromAPI = async () => {
@@ -27,6 +30,21 @@ const Videos = () => {
         let dataVideos = await responseVideos.json();
         dataVideos.sort((videoA, videoB) => videoA.completion_time_seconds - videoB.completion_time_seconds);
         setVideos(dataVideos);
+
+        setLoaded(true);
+    }
+
+    const buildVideosOfCategories = () => {
+        for(let category of categories){
+            let categoryWithVideos = {"category_id": category.id, "category_name": category.category_name, "videos": []};
+            categoriesWithVideos.push(categoryWithVideos);
+            for(let video of videos){
+                if(video.category_name === categoryWithVideos.category_name){
+                    categoryWithVideos.videos.push(video);
+                    video.position = categoryWithVideos.videos.length;
+                }
+            }
+        }
     }
 
     useEffect(() => {
@@ -35,12 +53,16 @@ const Videos = () => {
 
     // Modal
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
 
     // Columnas
 
     const columns = [
+        {
+            name: "Ranking",
+            selector: row => row.position,
+        },
         {
             name: "User",
             selector: row => row.user_name
@@ -68,11 +90,13 @@ const Videos = () => {
         selectAllRowsItem: true,
     };
 
-    if(categories.length == 0){
+    if(!isLoaded){
         return(
             <Header><h2 className="display-5">Loading...</h2></Header>
         )
     }
+
+    buildVideosOfCategories();
 
     return (
         <div>
@@ -84,17 +108,15 @@ const Videos = () => {
                     <Button variant="success" onClick={handleShow}>Submit Run</Button>
                 </div>
 
-              
-
                 <div className="">
                     <Tabs defaultActiveKey={categories[0].category_id}>
-                        {categories.map( (category) => (
-                            <Tab key={category.id} eventKey={category.id} title={category.category_name}>
+                        {categoriesWithVideos.map( (category) => (
+                            <Tab key={category.category_id} eventKey={category.category_id} title={category.category_name}>
                                 <div>
                                     <DataTable
                                         theme="dark"
                                         columns={columns}
-                                        data={videos}
+                                        data={category.videos}
                                         pagination
                                         paginationComponentOptions={paginationComponentOptions}
                                         dense
@@ -107,7 +129,7 @@ const Videos = () => {
                     </Tabs>
                 </div>
 
-                <Modal show={show} onHide={handleClose}>
+                <Modal show={showModal} onHide={handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>Error: unauthorized</Modal.Title>
                     </Modal.Header>
