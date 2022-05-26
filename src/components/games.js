@@ -1,6 +1,5 @@
-import { Button, Container, Table } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
 import { Link } from "react-router-dom";
 import Header from "../layouts/header";
 import Body from "../layouts/body";
@@ -32,23 +31,6 @@ const Games = () => {
 
     let searchedGames = !search ? games : games.filter( (game) => game.game_name.toLowerCase().includes(search.toLocaleLowerCase()) );
 
-    // Columns
-
-    const columns = [
-        {
-            name: <b className="display-6">All Available Games</b>,
-            selector: row => row.game_name,
-            cell: (game) => (
-                <Link to={"/games/"+game.id}><Button variant="success">{game.game_name}</Button></Link>
-            ),
-            center: true,
-        }
-    ]
-
-    const paginationComponentOptions = {
-        selectAllRowsItem: true,
-    };
-
     // View
 
     return(
@@ -56,22 +38,23 @@ const Games = () => {
             <Header><h1 className="display-3">Games</h1></Header>
 
             <Body>
-                <Container className="w-75">
+            
+                <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4 w-25" />
 
-                    <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4 w-25" />
+                <Row xs={2} md={5} ls={8} className="g-4">
+                    {searchedGames.map( (game, idx) => (
+                        <Col>
+                            <Card bg="dark" text="light" >
+                                <Card.Img variant="top" src="/joystick.png"/>
+                                <Card.Body>
+                                    <Card.Title className="text-start pb-2">{game.game_name}</Card.Title>
+                                    <Link to={"/games/"+game.id}><Button variant="primary">Videos of {game.game_name}</Button></Link>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
 
-                    <div>
-                        <DataTable
-                            theme="dark"
-                            columns={columns}
-                            data={searchedGames}
-                            pagination
-                            paginationComponentOptions={paginationComponentOptions}
-                            // striped
-                        />
-                    </div>
-
-                </Container>
             </Body>
         </div>
         
