@@ -43,8 +43,8 @@ const Games = () => {
 
                 <Row xs={2} md={5} ls={8} className="g-4">
                     {searchedGames.map( (game, idx) => (
-                        <Col>
-                            <Card bg="dark" text="light" >
+                        <Col key={game.id}>
+                            <Card bg="dark" text="light">
                                 <Card.Img variant="top" src="/joystick.png"/>
                                 <Card.Body>
                                     <Card.Title className="text-start pb-2">{game.game_name}</Card.Title>
