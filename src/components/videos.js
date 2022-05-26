@@ -69,7 +69,9 @@ const Videos = () => {
         },
         {
             name: "Category",
-            selector: row => row.category_name
+            selector: row => row.category_name,
+            hide: "sm",
+            hide: "md"
         },
         {
             name: "Completion Time",
@@ -77,10 +79,14 @@ const Videos = () => {
             cell: (video) => (
                 SecondsToTime(video.completion_time_seconds)
             ),
+            hide: "sm",
+            hide: "md"
         },
         {
             name: "Date",
             selector: row => new Date(row.created_at).toLocaleDateString({day: '2-digit', month: '2-digit', year: 'numeric'}),
+            hide: "sm",
+            hide: "md"
         },
         {
             name: "Go to Video",
@@ -125,6 +131,7 @@ const Videos = () => {
                                         paginationComponentOptions={paginationComponentOptions}
                                         dense
                                         defaultSortFieldId={5}
+                                        responsive
                                         // striped
                                     />
                                 </div>

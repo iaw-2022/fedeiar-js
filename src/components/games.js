@@ -41,7 +41,7 @@ const Games = () => {
             
                 <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4 w-25" />
 
-                <Row xs={2} md={5} ls={8} className="g-4">
+                <Row xs={1} sm={2} md={5} lg={8} className="g-4">
                     {searchedGames.map( (game, idx) => (
                         <Col key={game.id}>
                             <Card bg="dark" text="light">
