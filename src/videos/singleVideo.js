@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Stack } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import Body from "../layouts/body";
 import Header from "../layouts/header";
+import { SecondsToTime } from "../utilities/util";
 
 
 const SingleVideo = () => {
@@ -31,7 +32,7 @@ const SingleVideo = () => {
 
     return(
         <div>
-            <Header><h2 className="display-5">{video.game_name}</h2></Header>
+            <Header><h2 className="display-5 text-start">{video.game_name}</h2></Header>
 
             <Body>
                 <div>
@@ -52,7 +53,10 @@ const SingleVideo = () => {
 
                 <hr></hr>
 
-                <Link to={`/games/${game_id}`} className="float-start"><Button variant="danger">Go back</Button></Link>
+                <Stack direction="horizontal" gap={3}>
+                    <Link to={`/games/${game_id}`}><Button variant="primary">All videos of the game</Button></Link>
+                    <Link to={`/users/${video.user_id}`}><Button variant="primary">User's profile</Button></Link>
+                </Stack>
             </Body>
         </div>
     );
@@ -66,13 +70,4 @@ function parseYoutubeURL(URL){
     }
     return video_id
 }
-
-function SecondsToTime(totalSeconds){
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds / 60) % 60);
-    const seconds = totalSeconds % 60;
-
-    return `${hours} hours, ${minutes} minutes, ${seconds} seconds`;
-}
-
 export default SingleVideo;

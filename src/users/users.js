@@ -66,7 +66,7 @@ const Users = () => {
 
     return (
         <div>
-            <Header><h2 className="display-5">Users</h2></Header>
+            <Header><h1 className="display-3">Users</h1></Header>
 
             <Body>
 

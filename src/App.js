@@ -2,14 +2,16 @@ import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 // componentes
-import Home from './components/home.js';
+import Home from './home.js';
 import NavigationBar from './layouts/navbar.js';
-import Games from './components/games.js';
-import About from './components/about.js';
-import Videos from './components/videos';
-import SingleVideo from './components/singleVideo';
-import Users from './components/users';
-import SingleUser from './components/singleUser';
+import Games from './games/games.js';
+import About from './about.js';
+import Videos from './videos/videos';
+import SingleVideo from './videos/singleVideo';
+import Users from './users/users';
+import SingleUser from './users/singleUser';
+import SingleUserRuns from './users/singleUserRuns';
+import SingleUserProfile from './users/singleUserProfile';
 
 function App() {
     return (
@@ -22,7 +24,10 @@ function App() {
                         <Route path='games/:game_id' element={<Videos />}/>
                         <Route path='games/:game_id/:video_id' element={<SingleVideo />}/>
                         <Route path='users' element={<Users />}/>
-                        <Route path='users/:user_id' element={<SingleUser />}/>
+                        <Route path='users/:user_id/' element={<SingleUser />}>
+                            <Route index element={<SingleUserRuns />} />
+                            <Route path='profile' element={<SingleUserProfile />} />
+                        </Route>
                         <Route path='about' element={<About />} />
                         <Route path='*' element={<Navigate replace to="/" />} />
                     </Route>

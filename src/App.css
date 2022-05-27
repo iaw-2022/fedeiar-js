@@ -1,10 +1,14 @@
 .App {
-  text-align: center;
+  /* text-align: left; */
 }
 
 section {
     background-color:bisque;
     min-height: 100vh;
+}
+
+.bg-color {
+    background-color:bisque;
 }
 
 /* .rdt_TableCol {

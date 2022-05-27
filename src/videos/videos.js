@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import { useParams, useLocation, Link } from "react-router-dom";
 import Header from "../layouts/header";
 import Body from "../layouts/body";
+import { SecondsToTime } from "../utilities/util";
 
 
 const Videos = () => {
@@ -65,7 +66,10 @@ const Videos = () => {
         },
         {
             name: "User",
-            selector: row => row.user_name
+            selector: row => row.user_name,
+            cell: (video) => (
+                <Link to={`/users/${video.user_id}`}>{video.user_name}</Link>
+            ),
         },
         {
             name: "Category",
@@ -114,7 +118,7 @@ const Videos = () => {
 
             <Body>
 
-                <div className="mb-3 text-start">
+                <div className="mb-3">
                     <Button variant="success" onClick={handleShow}>Submit Run</Button>
                 </div>
 
@@ -158,13 +162,6 @@ const Videos = () => {
     )
 }
 
-function SecondsToTime(totalSeconds) {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds / 60) % 60);
-    const seconds = totalSeconds % 60;
-
-    return `${hours} hours, ${minutes} minutes, ${seconds} seconds`;
-}
 
 
 /* class Videos extends React.Component{

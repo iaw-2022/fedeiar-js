@@ -1,4 +1,4 @@
-import Header from "../layouts/header";
+import Header from "./layouts/header";
 
 const About = () => {
     return(
