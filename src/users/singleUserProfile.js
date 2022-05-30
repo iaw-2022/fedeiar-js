@@ -36,13 +36,12 @@ const SingleUserProfile = () => {
 
     return(
         <div>
-            <h1 className="display-6 text-start pb-2">Profile</h1>
+            <h3 className="text-start pb-2">Profile</h3>
 
-            <p class="fs-5">username: {user.user_name}</p>
-            <p class="fs-5">email: {user.email}</p>
-            <p class="fs-5">from: {user.nationality}</p>
-            <p class="fs-5">joined in: {new Date(user.created_at).toLocaleDateString({day: '2-digit', month: '2-digit', year: 'numeric'})}</p>
-
+            <p className="fs-5">username: {user.user_name}</p>
+            <p className="fs-5">email: {user.email}</p>
+            <p className="fs-5">from: {user.nationality}</p>
+            <p className="fs-5">joined in: {new Date(user.created_at).toLocaleDateString({day: '2-digit', month: '2-digit', year: 'numeric'})}</p>
         </div>
     );
 

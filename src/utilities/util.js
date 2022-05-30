@@ -6,6 +6,11 @@ function SecondsToTime(totalSeconds) {
     return `${hours} hours, ${minutes} minutes, ${seconds} seconds`;
 }
 
+function TimeToSeconds(hours, minutes, seconds){
+    return (parseInt(hours) * 3600) + (parseInt(minutes) * 60) + parseInt(seconds);
+}
+
 module.exports = {
-    SecondsToTime
+    SecondsToTime,
+    TimeToSeconds
 }

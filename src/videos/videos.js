@@ -5,14 +5,18 @@ import { useParams, useLocation, Link } from "react-router-dom";
 import Header from "../layouts/header";
 import Body from "../layouts/body";
 import { SecondsToTime } from "../utilities/util";
+import { useAuth0 } from "@auth0/auth0-react";
 
 
 const Videos = () => {
+
+    const { isAuthenticated } = useAuth0();
 
     const { game_id } = useParams();
     let categoriesWithVideos = [];
 
     // Hooks
+    
     const [videos, setVideos] = useState([]);
     const [categories, setCategories] = useState([]);
     //const [videosOfCatgories, setVideosOfCategories] = useState([]);
@@ -20,6 +24,7 @@ const Videos = () => {
     const [isLoaded, setLoaded] = useState(false);
 
     // Fetch
+
     const getDataFromAPI = async () => {
         const URL_categories = process.env.REACT_APP_API_URL+"/categories/"+ game_id;
         const responseCategories = await fetch(URL_categories);
@@ -74,7 +79,6 @@ const Videos = () => {
         {
             name: "Category",
             selector: row => row.category_name,
-            hide: "sm",
             hide: "md"
         },
         {
@@ -83,13 +87,11 @@ const Videos = () => {
             cell: (video) => (
                 SecondsToTime(video.completion_time_seconds)
             ),
-            hide: "sm",
             hide: "md"
         },
         {
             name: "Date",
             selector: row => new Date(row.created_at).toLocaleDateString({day: '2-digit', month: '2-digit', year: 'numeric'}),
-            hide: "sm",
             hide: "md"
         },
         {
@@ -112,6 +114,15 @@ const Videos = () => {
 
     buildCategoriesWithVideos();
 
+    let submitRunButton;
+    if(!isAuthenticated){
+        submitRunButton = <Button variant="success" onClick={handleShow}>Submit Run</Button>;
+    } else{
+        submitRunButton = <Link to={`/games/${game_id}/create`}><Button variant="success">Submit Run</Button></Link>;
+    }
+
+    // View
+    
     return (
         <div>
             <Header><h2 className="display-5">{categories[0].game_name}</h2></Header>
@@ -119,7 +130,7 @@ const Videos = () => {
             <Body>
 
                 <div className="mb-3">
-                    <Button variant="success" onClick={handleShow}>Submit Run</Button>
+                    {submitRunButton}
                 </div>
 
                 <div className="">

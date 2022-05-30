@@ -51,12 +51,19 @@ const SingleVideo = () => {
                     <p className="text-start">Done in: {SecondsToTime(video.completion_time_seconds)}</p>
                 </div>
 
+                <Stack  direction="horizontal" gap={3}>
+                    <Button variant="info">Edit video</Button>
+                    <Button variant="danger">Delete video</Button>
+                </Stack>
+
                 <hr></hr>
 
                 <Stack direction="horizontal" gap={3}>
-                    <Link to={`/games/${game_id}`}><Button variant="primary">All videos of the game</Button></Link>
-                    <Link to={`/users/${video.user_id}`}><Button variant="primary">User's profile</Button></Link>
+                    <Link to={`/games/${game_id}`}><Button variant="primary">Go to videos of the game</Button></Link>
+                    <Link to={`/users/${video.user_id}`}><Button variant="primary">Go to user's profile</Button></Link>
                 </Stack>
+
+                
             </Body>
         </div>
     );

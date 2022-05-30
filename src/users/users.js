@@ -44,13 +44,11 @@ const Users = () => {
             name: "Nationality",
             selector: row => row.nationality,
             hide: "sm",
-            hide: "md"
         },
         {
             name: "Joined in",
             selector: row => new Date(row.created_at).toLocaleDateString({day: '2-digit', month: '2-digit', year: 'numeric'}),
             hide: "sm",
-            hide: "md"
         },
     ]
 
