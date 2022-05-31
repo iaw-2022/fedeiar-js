@@ -6,7 +6,7 @@ import Header from "../layouts/header";
 import { TimeToSeconds } from "../utilities/util";
 
 
-const CreateVideo = () => {
+const EditVideo = () => {
 
     // auth0
 
@@ -14,7 +14,7 @@ const CreateVideo = () => {
 
     // Parameters
 
-    const { game_id } = useParams();
+    const { game_id, video_id } = useParams();
 
     // Hooks
 
@@ -25,6 +25,7 @@ const CreateVideo = () => {
     const [seconds, setSeconds] = useState('');
     
     const [categories, setCategories] = useState([]);
+    const [video, setVideos] = useState([]);
     const [isLoaded, setLoaded] = useState(false);
 
     const navigate = useNavigate();
@@ -36,7 +37,16 @@ const CreateVideo = () => {
         const responseCategories = await fetch(URLCategories);
         const dataCategories = await responseCategories.json();
         setCategories(dataCategories);
-        setCategorySelected(dataCategories[0].id);
+
+        const URLVideo = process.env.REACT_APP_API_URL+"/videos/"+video_id;
+        const responseVideo = await fetch(URLVideo);
+        const dataVideo = await responseVideo.json();
+        setVideos(dataVideo);
+
+        setCategorySelected(dataVideo.category_id);
+        console.log(dataVideo);
+        setYoutubeURL(dataVideo.link_video);
+        // TODO: terminar de setear la hora.
 
         setLoaded(true);
     }
@@ -45,9 +55,9 @@ const CreateVideo = () => {
         getDataFromAPI();
     }, []);
 
-    // Handle submit
+    // Handle update
 
-    const handleSubmit = async (e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault(); // Evita que se refresheen los campos después de dar submit.
         
         const video = {"game_id": game_id, "category_id": categorySelectedId, "link": youtubeURL, "time": TimeToSeconds(hours, minutes, seconds)};
@@ -93,9 +103,9 @@ const CreateVideo = () => {
 
     return(
         <div>
-            <Header><h1 className="display-4">Submit a new run for {categories[0].game_name}!</h1></Header>
+            <Header><h1 className="display-4">Edit video of {categories[0].game_name}!</h1></Header>
 
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleUpdate}>
 
                 <Form.Group className="mb-3">
                     <Form.Label>Choose a category</Form.Label>
@@ -133,8 +143,8 @@ const CreateVideo = () => {
                 <hr></hr>
 
                 <Stack direction="horizontal" gap={3}>
-                    <Link to={`/games/${game_id}`} className="btn btn-danger">Go back</Link>
-                    <Button variant="primary" type="submit">Submit</Button>
+                    <Link to={`/games/${game_id}/${video_id}`} className="btn btn-danger">Go back</Link>
+                    <Button variant="primary" type="submit">Update</Button>
                 </Stack>
 
             </Form>
@@ -143,4 +153,4 @@ const CreateVideo = () => {
     )
 }
 
-export default CreateVideo;
+export default EditVideo;

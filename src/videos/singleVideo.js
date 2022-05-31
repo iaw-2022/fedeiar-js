@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import { Button, Stack } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Body from "../layouts/body";
 import Header from "../layouts/header";
 import { SecondsToTime } from "../utilities/util";
@@ -9,13 +9,19 @@ import { SecondsToTime } from "../utilities/util";
 
 const SingleVideo = () => {
 
+    // Parameters
+
     const { game_id, video_id } = useParams();
 
-    const { isAuthenticated } = useAuth0();
+    // auth0
+
+    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
     // Hooks
 
     const [video, setVideo] = useState([]);
+
+    const navigate = useNavigate();
 
     // Fetch
 
@@ -36,16 +42,35 @@ const SingleVideo = () => {
 
     // Handle Delete
 
-    //TODO: hacer el borrado
+    const handleDelete = async () => {
+        const token = await getAccessTokenSilently();
+        try{
+            const response = await fetch(process.env.REACT_APP_API_URL+"/videos/"+video_id, {
+                method: "DELETE",
+                headers: {
+                    authorization: `Bearer ${token}`
+                }
+            });
+
+            if(response.status === 204){
+                navigate(`/games/${game_id}`);
+            } else{
+                let error = await response.json();
+                console.log(error);
+            }
+        } catch(error){
+            console.log(error);
+        }
+    }
 
     // Wait for data
 
     let updateDeleteButtons = null;
     if(isAuthenticated){ // TODO: y tambien si el video le pertenece (para eso tendriamos que saber si el user_id asociado al video corresponde al del usuario logueado)
         updateDeleteButtons = (
-            <Stack  direction="horizontal" gap={3}>
-                <Button variant="info">Edit video</Button>
-                <Button variant="danger">Delete video</Button>
+            <Stack direction="horizontal" gap={3}>
+                <Link to={`/games/${game_id}/${video_id}/edit`}><Button variant="info">Edit video</Button></Link>
+                <Button onClick={handleDelete} variant="danger">Delete video</Button>
             </Stack>
         );
     }

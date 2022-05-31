@@ -13,6 +13,7 @@ import SingleUser from './users/singleUser';
 import SingleUserRuns from './users/singleUserRuns';
 import SingleUserProfile from './users/singleUserProfile';
 import CreateVideo from './videos/createVideo';
+import EditVideo from './videos/editVideo';
 
 function App() {
     return (
@@ -25,6 +26,7 @@ function App() {
                         <Route path='games/:game_id' element={<Videos />}/>
                         <Route path='games/:game_id/create' element={<CreateVideo />}/>
                         <Route path='games/:game_id/:video_id' element={<SingleVideo />}/>
+                        <Route path='games/:game_id/:video_id/edit' element={<EditVideo />}/>
                         <Route path='users' element={<Users />}/>
                         <Route path='users/:user_id/' element={<SingleUser />}>
                             <Route index element={<SingleUserRuns />} />
