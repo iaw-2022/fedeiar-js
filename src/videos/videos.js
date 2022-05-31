@@ -106,6 +106,8 @@ const Videos = () => {
         selectAllRowsItem: true,
     };
 
+    // Wait for data
+
     if(!isLoaded){
         return(
             <Header><h2 className="display-5">Loading...</h2></Header>

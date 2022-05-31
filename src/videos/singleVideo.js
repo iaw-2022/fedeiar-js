@@ -1,3 +1,4 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import { Button, Stack } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
@@ -10,10 +11,14 @@ const SingleVideo = () => {
 
     const { game_id, video_id } = useParams();
 
+    const { isAuthenticated } = useAuth0();
+
     // Hooks
+
     const [video, setVideo] = useState([]);
 
     // Fetch
+
     const getDataFromAPI = async() => {
         const URL_video = process.env.REACT_APP_API_URL+"/videos/"+video_id;
         let response = await fetch(URL_video);
@@ -29,6 +34,23 @@ const SingleVideo = () => {
         getDataFromAPI();
     }, []);
 
+    // Handle Delete
+
+    //TODO: hacer el borrado
+
+    // Wait for data
+
+    let updateDeleteButtons = null;
+    if(isAuthenticated){ // TODO: y tambien si el video le pertenece (para eso tendriamos que saber si el user_id asociado al video corresponde al del usuario logueado)
+        updateDeleteButtons = (
+            <Stack  direction="horizontal" gap={3}>
+                <Button variant="info">Edit video</Button>
+                <Button variant="danger">Delete video</Button>
+            </Stack>
+        );
+    }
+
+    // View
 
     return(
         <div>
@@ -51,10 +73,7 @@ const SingleVideo = () => {
                     <p className="text-start">Done in: {SecondsToTime(video.completion_time_seconds)}</p>
                 </div>
 
-                <Stack  direction="horizontal" gap={3}>
-                    <Button variant="info">Edit video</Button>
-                    <Button variant="danger">Delete video</Button>
-                </Stack>
+                {updateDeleteButtons}
 
                 <hr></hr>
 
