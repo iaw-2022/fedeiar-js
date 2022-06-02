@@ -3,12 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "../layouts/header";
 import Body from "../layouts/body";
+import Loading from "../layouts/loading";
 
 const Games = () => {
 
     // Hooks
     const [games, setGames] = useState([]);
     const [search, setSearch] = useState("");
+    const [isLoaded, setLoaded] = useState(false);
 
     // Fetch
     
@@ -17,6 +19,8 @@ const Games = () => {
         const response = await fetch(URL);
         const data = await response.json();
         setGames(data);
+
+        setLoaded(true);
     }
 
     useEffect( () => {
@@ -30,6 +34,14 @@ const Games = () => {
     }
 
     let searchedGames = !search ? games : games.filter( (game) => game.game_name.toLowerCase().includes(search.toLocaleLowerCase()) );
+
+    // Wait for data
+
+    if(!isLoaded){
+        return(
+            <Loading></Loading>
+        )
+    }
 
     // View
 

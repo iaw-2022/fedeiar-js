@@ -20,7 +20,7 @@ function App() {
 
 
     function updateUser(user) {
-        console.log(user);
+        //console.log(user);
     }
 
     return (

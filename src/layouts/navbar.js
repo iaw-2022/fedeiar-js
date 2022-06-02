@@ -20,10 +20,11 @@ const NavigationBar = (props) => {
 
     const buildLoginButtons = async () => {
         let loggedUser = null;
-        console.log("entre1");
         if(isAuthenticated){
-            console.log("entro?");
             await fetchUser();
+            if(loggedUser == null){
+                return;
+            }
             setSessionButtons(<NavDropdown align={"end"} key="user-dropdown" title={loggedUser.user_name}>
                                     <NavDropdown.Item as={Link} to={`/users/${loggedUser.id}`} key="1">View profile</NavDropdown.Item>
                                     <NavDropdown.Item key="2" onClick={() => { logout({ returnTo: window.location.origin }) }}>Log out</NavDropdown.Item>
@@ -35,19 +36,16 @@ const NavigationBar = (props) => {
 
         async function fetchUser() {
             const token = await getAccessTokenSilently();
-            let response = await fetch(process.env.REACT_APP_API_URL+"/users/email/"+user.email, {
+            let response = await fetch(process.env.REACT_APP_API_URL+"/user_logged", {
                 headers: {
                     authorization: `Bearer ${token}`
                 }
             });
-            console.log("entre3");
             if(response.status === 200){
                 loggedUser = await response.json();
-                console.log(loggedUser);
             } else{
                 navigate(`/users/register`);
             }
-            console.log("entre4");
         }
     }
 

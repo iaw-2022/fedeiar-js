@@ -14,7 +14,6 @@ const UserRegisterFormulary = () => {
 
     const [username , setUsername] = useState("");
     const [nationality, setNationality] = useState("");
-    const [isLoaded, setLoaded] = useState(false);
     const navigate = useNavigate();
 
     // Create user
@@ -34,7 +33,6 @@ const UserRegisterFormulary = () => {
             });
             
             if(response.status === 204){
-                console.log("entre?");
                 navigate(`/`);
             } else{
                 let error = await response.json();

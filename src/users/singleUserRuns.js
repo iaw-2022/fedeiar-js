@@ -69,11 +69,15 @@ const SingleUserRuns = () => {
         selectAllRowsItem: true,
     };
 
+    // Wait for data
+
     if(!isLoaded){
         return(
             <h2 className="display-5">Loading...</h2>
         )
     }
+
+    // View
 
     return(
         <div>
