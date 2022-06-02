@@ -1,24 +1,49 @@
 import { Navbar, Nav, Container, Button, NavDropdown } from "react-bootstrap";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
+import { useState } from "react";
 
 const NavigationBar = () => {
 
-    const {isAuthenticated, loginWithPopup, logout, user} = useAuth0();
+    // auth0
+
+    const {isAuthenticated, loginWithPopup, logout, user, getAccessTokenSilently} = useAuth0();
+
+    // Hooks
+
+    const [loggedUser, setLoggedUser] = useState(null);
+    const navigate = useNavigate();
+
+    // Login
 
     let sessionButtons = [];
     if(isAuthenticated){
-
-        // TODO: pegarle a laravel con un fetch() y ver si el user esta en la BD de laravel o no. En caso de que no esté, redirigirlo con useNavigate a que complete el login.
+        fetchUser();
 
         sessionButtons.push(<NavDropdown align={"end"} key="user-dropdown" title={user.nickname}>
-                                <NavDropdown.Item key="2">View profile</NavDropdown.Item>
-                                <NavDropdown.Item key="1" onClick={() => { logout({ returnTo: window.location.origin }) }}>Log out</NavDropdown.Item>
+                                <NavDropdown.Item key="1">View profile</NavDropdown.Item>
+                                <NavDropdown.Item key="2" onClick={() => { logout({ returnTo: window.location.origin }) }}>Log out</NavDropdown.Item>
                             </NavDropdown>)
 
     } else{
         sessionButtons.push(<Nav.Link key="1" onClick={loginWithPopup}>Login</Nav.Link>);
     }
+
+    async function fetchUser() {
+        const token = getAccessTokenSilently();
+        let response = await fetch(process.env.REACT_APP_API_URL+"/users/email/"+user.email, {
+            headers: {
+                authorization: `Bearer ${token}`
+            }
+        });
+        if(response.status === 200){
+            setLoggedUser(await response.json());
+        } else{
+            navigate(`/users/register`);
+        }
+    }
+
+    // View
 
     return (
         <div>

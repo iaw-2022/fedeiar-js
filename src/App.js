@@ -14,6 +14,7 @@ import SingleUserRuns from './users/singleUserRuns';
 import SingleUserProfile from './users/singleUserProfile';
 import CreateVideo from './videos/createVideo';
 import EditVideo from './videos/editVideo';
+import UserRegisterFormulary from './users/userRegisterFormulary';
 
 function App() {
     return (
@@ -35,6 +36,7 @@ function App() {
                         <Route path='about' element={<About />} />
                         <Route path='*' element={<Navigate replace to="/" />} />
                     </Route>
+                    <Route path='/users/register' element={<UserRegisterFormulary />}/>
                 </Routes>
             </BrowserRouter>
         </div>

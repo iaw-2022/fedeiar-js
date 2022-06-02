@@ -51,7 +51,7 @@ const CreateVideo = () => {
         e.preventDefault(); // Evita que se refresheen los campos después de dar submit.
         
         const video = {"game_id": game_id, "category_id": categorySelectedId, "link": youtubeURL, "time": TimeToSeconds(hours, minutes, seconds)};
-        //console.log(video);
+        
         const token = await getAccessTokenSilently();
         try{
             const response = await fetch(process.env.REACT_APP_API_URL+"/videos", {
