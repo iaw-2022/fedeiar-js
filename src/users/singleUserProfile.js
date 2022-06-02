@@ -1,10 +1,18 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Button, Stack } from "react-bootstrap";
+import { Link, useParams } from "react-router-dom";
 
 
 const SingleUserProfile = () => {
 
+    // Parameters
+
     const { user_id } = useParams();
+
+    // auth0
+
+    const { isAuthenticated } = useAuth0();
 
     // Hooks
 
@@ -26,13 +34,25 @@ const SingleUserProfile = () => {
         getDataFromAPI();
     }, []);
     
-    // View
+    // Wait for data
     
     if(!isLoaded){
         return(
             <h2 className="display-5">Loading...</h2>
         )
     }
+
+    let updateDeleteButtons = null;
+    if(isAuthenticated){ // TODO: y tambien si el video le pertenece (para eso tendriamos que saber si el user_id asociado al video corresponde al del usuario logueado)
+        updateDeleteButtons = (
+            <Stack direction="horizontal" gap={3}>
+                <Link to={`/`}><Button variant="info">Edit profile</Button></Link>
+                <Button variant="danger">Delete account</Button>
+            </Stack>
+        );
+    }
+
+    // View
 
     return(
         <div>
@@ -42,6 +62,10 @@ const SingleUserProfile = () => {
             <p className="fs-5">email: {user.email}</p>
             <p className="fs-5">from: {user.nationality}</p>
             <p className="fs-5">joined in: {new Date(user.created_at).toLocaleDateString({day: '2-digit', month: '2-digit', year: 'numeric'})}</p>
+
+            <hr></hr>
+
+            {updateDeleteButtons}
         </div>
     );
 

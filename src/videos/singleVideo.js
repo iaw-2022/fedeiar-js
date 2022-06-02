@@ -4,6 +4,7 @@ import { Button, Stack } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Body from "../layouts/body";
 import Header from "../layouts/header";
+import Loading from "../layouts/loading";
 import { SecondsToTime } from "../utilities/util";
 
 
@@ -15,11 +16,12 @@ const SingleVideo = () => {
 
     // auth0
 
-    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+    const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
 
     // Hooks
 
     const [video, setVideo] = useState([]);
+    const [isLoaded, setLoaded] = useState(false);
 
     const navigate = useNavigate();
 
@@ -34,6 +36,7 @@ const SingleVideo = () => {
         dataVideo.link_video = "https://www.youtube.com/embed/"+youtube_id;
 
         setVideo(dataVideo);
+        setLoaded(true);
     }
 
     useEffect( () => {
@@ -64,6 +67,12 @@ const SingleVideo = () => {
     }
 
     // Wait for data
+
+    if(!isLoaded){
+        return(
+            <Loading></Loading>
+        )
+    }
 
     let updateDeleteButtons = null;
     if(isAuthenticated){ // TODO: y tambien si el video le pertenece (para eso tendriamos que saber si el user_id asociado al video corresponde al del usuario logueado)

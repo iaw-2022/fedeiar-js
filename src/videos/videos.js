@@ -6,6 +6,7 @@ import Header from "../layouts/header";
 import Body from "../layouts/body";
 import { SecondsToTime } from "../utilities/util";
 import { useAuth0 } from "@auth0/auth0-react";
+import Loading from "../layouts/loading";
 
 
 const Videos = () => {
@@ -19,7 +20,6 @@ const Videos = () => {
     
     const [videos, setVideos] = useState([]);
     const [categories, setCategories] = useState([]);
-    //const [videosOfCatgories, setVideosOfCategories] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [isLoaded, setLoaded] = useState(false);
 
@@ -110,7 +110,7 @@ const Videos = () => {
 
     if(!isLoaded){
         return(
-            <Header><h2 className="display-5">Loading...</h2></Header>
+            <Loading></Loading>
         )
     }
 
@@ -174,49 +174,5 @@ const Videos = () => {
         </div>
     )
 }
-
-
-
-/* class Videos extends React.Component{
-    state = {
-        game: null,
-        videos: null,
-        isLoaded: false
-    }
-
-    async componentDidMount() {
-        let { game_id } = this.props.match.params.game_id;
-        console.log("aa");
-        console.log("valor: "+ game_id);
-        let URL = process.env.REACT_APP_API_URL + "/games/"+game_id;
-        let response = await fetch(URL);
-        const resultGame = await response.json();
-        
-        URL = process.env.REACT_APP_API_URL + "/games/"+game_id;
-        response = await fetch(URL);
-        const resultVideos = await response.json();
-
-        this.setState({
-            games: resultGame,
-            videos: resultVideos,
-            isLoaded: true
-        })
-    }
-
-    render(){
-        const { game, videos, isLoaded } = this.state;
-        if (!isLoaded) {
-            return <div><h1>Loading...</h1></div>;
-        }
-        console.log(game);
-
-        return(<div>
-            <Container>
-                <h1>Videos</h1>
-            </Container>
-
-        </div>);
-    }
-} */
 
 export default Videos;

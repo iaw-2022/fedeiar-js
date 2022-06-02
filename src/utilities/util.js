@@ -6,7 +6,7 @@ function SecondsToTime(totalSeconds) {
     return `${hours} hours, ${minutes} minutes, ${seconds} seconds`;
 }
 
-function SecondsToTimeArray(totalSeconds){
+function SecondsToTimeToArray(totalSeconds){
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds / 60) % 60);
     const seconds = totalSeconds % 60;
@@ -20,5 +20,6 @@ function TimeToSeconds(hours, minutes, seconds){
 
 module.exports = {
     SecondsToTime,
+    SecondsToTimeToArray,
     TimeToSeconds
 }

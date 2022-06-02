@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Header from "../layouts/header";
-import { TimeToSeconds } from "../utilities/util";
+import { SecondsToTimeToArray, TimeToSeconds } from "../utilities/util";
 
 
 const EditVideo = () => {
@@ -44,9 +44,11 @@ const EditVideo = () => {
         setVideos(dataVideo);
 
         setCategorySelected(dataVideo.category_id);
-        console.log(dataVideo);
         setYoutubeURL(dataVideo.link_video);
-        // TODO: terminar de setear la hora.
+        const time = SecondsToTimeToArray(dataVideo.completion_time_seconds);
+        setHours(time[0]);
+        setMinutes(time[1]);
+        setSeconds(time[2]);
 
         setLoaded(true);
     }
@@ -61,11 +63,11 @@ const EditVideo = () => {
         e.preventDefault(); // Evita que se refresheen los campos después de dar submit.
         
         const video = {"game_id": game_id, "category_id": categorySelectedId, "link": youtubeURL, "time": TimeToSeconds(hours, minutes, seconds)};
-        //console.log(video);
+        
         const token = await getAccessTokenSilently();
         try{
-            const response = await fetch(process.env.REACT_APP_API_URL+"/videos", {
-                method: "POST",
+            const response = await fetch(process.env.REACT_APP_API_URL+`/videos/${video_id}`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     authorization: `Bearer ${token}`
@@ -74,7 +76,7 @@ const EditVideo = () => {
             });
             
             if(response.status === 204){
-                navigate(`/games/${game_id}`);
+                navigate(`/games/${game_id}/${video_id}`);
             } else{
                 let error = await response.json();
                 console.log(error);

@@ -17,11 +17,17 @@ import EditVideo from './videos/editVideo';
 import UserRegisterFormulary from './users/userRegisterFormulary';
 
 function App() {
+
+
+    function updateUser(user) {
+        console.log(user);
+    }
+
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path='/' element={<NavigationBar />}>
+                    <Route path='/' element={<NavigationBar updateUser={updateUser} />}>
                         <Route index element={<Home />} />
                         <Route path='games' element={<Games />} />
                         <Route path='games/:game_id' element={<Videos />}/>

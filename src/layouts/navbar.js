@@ -3,10 +3,12 @@ import { Outlet, Link, useNavigate } from "react-router-dom";
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from "react";
 
-const NavigationBar = () => {
+const NavigationBar = (props) => {
+
+    props.updateUser("hola");
 
     // auth0
-
+    
     const {isAuthenticated, loginWithPopup, logout, user, getAccessTokenSilently} = useAuth0();
 
     // Hooks
@@ -16,15 +18,13 @@ const NavigationBar = () => {
 
     // Login
 
-    
-   
     const buildLoginButtons = async () => {
         let loggedUser = null;
         console.log("entre1");
         if(isAuthenticated){
             console.log("entro?");
             await fetchUser();
-            setSessionButtons(<NavDropdown align={"end"} key="user-dropdown" title={user.nickname}>
+            setSessionButtons(<NavDropdown align={"end"} key="user-dropdown" title={loggedUser.user_name}>
                                     <NavDropdown.Item as={Link} to={`/users/${loggedUser.id}`} key="1">View profile</NavDropdown.Item>
                                     <NavDropdown.Item key="2" onClick={() => { logout({ returnTo: window.location.origin }) }}>Log out</NavDropdown.Item>
                                 </NavDropdown>)
@@ -61,7 +61,7 @@ const NavigationBar = () => {
         <div>
             <Navbar bg="dark" variant="dark" expand="lg">
                 <Container>
-                    <Navbar.Brand as={Link} to="/">React-Bootstrap</Navbar.Brand>
+                    <Navbar.Brand as={Link} to="/">Speedrun</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse>
                         <Nav className="me-auto">

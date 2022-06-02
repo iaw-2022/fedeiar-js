@@ -23,7 +23,6 @@ const UserRegisterFormulary = () => {
         e.preventDefault();
         const user = {user_name: username, nationality: nationality}
         const token = await getAccessTokenSilently();
-        console.log(token);
         try{
             const response = await fetch(process.env.REACT_APP_API_URL+"/users", {
                 method: "POST",
