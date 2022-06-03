@@ -8,7 +8,7 @@ import Loading from "../layouts/loading";
 import { SecondsToTime } from "../utilities/util";
 
 
-const SingleVideo = () => {
+const SingleVideo = (props) => {
 
     // Parameters
 
@@ -67,15 +67,17 @@ const SingleVideo = () => {
     }
 
     // Wait for data
-
+    
     if(!isLoaded){
         return(
             <Loading></Loading>
         )
     }
+    
 
     let updateDeleteButtons = null;
-    if(isAuthenticated){ // TODO: y tambien si el video le pertenece (para eso tendriamos que saber si el user_id asociado al video corresponde al del usuario logueado)
+    
+    if(isAuthenticated && props.loggedUser != null && props.loggedUser.id == video.user_id){ // TODO: preguntar
         updateDeleteButtons = (
             <Stack direction="horizontal" gap={3}>
                 <Link to={`/games/${game_id}/${video_id}/edit`}><Button variant="info">Edit video</Button></Link>

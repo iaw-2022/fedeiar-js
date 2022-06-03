@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 
 const NavigationBar = (props) => {
 
-    props.updateUser("hola");
-
     // auth0
     
     const {isAuthenticated, loginWithPopup, logout, user, getAccessTokenSilently} = useAuth0();
@@ -25,6 +23,7 @@ const NavigationBar = (props) => {
             if(loggedUser == null){
                 return;
             }
+            props.updateUser(loggedUser);
             setSessionButtons(<NavDropdown align={"end"} key="user-dropdown" title={loggedUser.user_name}>
                                     <NavDropdown.Item as={Link} to={`/users/${loggedUser.id}`} key="1">View profile</NavDropdown.Item>
                                     <NavDropdown.Item key="2" onClick={() => { logout({ returnTo: window.location.origin }) }}>Log out</NavDropdown.Item>
