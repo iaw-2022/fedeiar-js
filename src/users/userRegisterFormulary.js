@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
-import { Button, Col, Container, Form, Row, Stack } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Stack, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../layouts/header";
 
@@ -14,7 +14,13 @@ const UserRegisterFormulary = () => {
 
     const [username , setUsername] = useState("");
     const [nationality, setNationality] = useState("");
+    const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
+
+    // Modal
+
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
 
     // Create user
 
@@ -34,6 +40,8 @@ const UserRegisterFormulary = () => {
             
             if(response.status === 204){
                 navigate(`/`);
+            } else if(response.status === 400){
+                handleShow();
             } else{
                 let error = await response.json();
                 console.log(error);
@@ -42,7 +50,8 @@ const UserRegisterFormulary = () => {
             console.log(error);
         }
     }
-    
+
+    // Wait for data
 
     if (!isAuthenticated) {
         return (
@@ -58,8 +67,11 @@ const UserRegisterFormulary = () => {
         )
     }
 
+    // View
+
     return (
         <div>
+
             <section>
                 <Container>
                     <Header><h1 className="display-3">Complete registration!</h1></Header>
@@ -87,7 +99,24 @@ const UserRegisterFormulary = () => {
                     </Form>
 
                 </Container>
+
+                <Modal show={showModal} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Error: name already in use</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Choose another username</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="danger" onClick={handleClose}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+            
             </section>
+
+            
+
         </div>
     );
 }

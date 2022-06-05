@@ -11,46 +11,52 @@ const NavigationBar = (props) => {
 
     // Hooks
 
-    const [sessionButtons, setSessionButtons] = useState(null);
+    const [loggedUser, setLoggedUser] = useState(null);
+    const [isLoaded, setLoaded] = useState(false);
     const navigate = useNavigate();
 
     // Login
 
-    const buildLoginButtons = async () => {
-        let loggedUser = null;
-        if(isAuthenticated){
-            await fetchUser();
-            if(loggedUser == null){
-                return;
+    const getUserFromAPI = async () => {
+        const token = await getAccessTokenSilently();
+        let response = await fetch(process.env.REACT_APP_API_URL+"/user_logged", {
+            headers: {
+                authorization: `Bearer ${token}`
             }
-            props.updateUser(loggedUser);
-            setSessionButtons(<NavDropdown align={"end"} key="user-dropdown" title={loggedUser.user_name}>
-                                    <NavDropdown.Item as={Link} to={`/users/${loggedUser.id}`} key="1">View profile</NavDropdown.Item>
-                                    <NavDropdown.Item key="2" onClick={() => { logout({ returnTo: window.location.origin }) }}>Log out</NavDropdown.Item>
-                                </NavDropdown>)
-    
-        } else{
-            setSessionButtons(<Nav.Link key="1" onClick={loginWithPopup}>Login</Nav.Link>);
-        }
+        });
+        if(response.status === 200){
+            const dataUser = await response.json();
+            props.updateUser(dataUser);
 
-        async function fetchUser() {
-            const token = await getAccessTokenSilently();
-            let response = await fetch(process.env.REACT_APP_API_URL+"/user_logged", {
-                headers: {
-                    authorization: `Bearer ${token}`
-                }
-            });
-            if(response.status === 200){
-                loggedUser = await response.json();
-            } else{
-                navigate(`/users/register`);
-            }
+            setLoggedUser(dataUser);
+            setLoaded(true);
+        } else{
+            navigate(`/users/register`);
         }
     }
 
     useEffect( () => {
-        buildLoginButtons();
+        if(isAuthenticated){
+            getUserFromAPI();
+        }
     }, [isAuthenticated]);
+
+    // Wait for data
+
+    let sessionButtons = null;
+
+    if(isAuthenticated){
+        if(!isLoaded){
+            sessionButtons = <Nav.Link>Loading...</Nav.Link>
+        } else{
+            sessionButtons = (<NavDropdown align={"end"} key="user-dropdown" title={loggedUser.user_name}>
+                                <NavDropdown.Item as={Link} to={`/users/${loggedUser.id}`} key="1">View profile</NavDropdown.Item>
+                                <NavDropdown.Item key="2" onClick={() => { logout({ returnTo: window.location.origin }) }}>Log out</NavDropdown.Item>
+                            </NavDropdown>);
+        }
+    } else{
+        sessionButtons = <Nav.Link key="1" onClick={loginWithPopup}>Login</Nav.Link>
+    }
 
     // View
 

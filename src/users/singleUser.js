@@ -19,7 +19,7 @@ const SingleUser = () => {
     const [error, setError] = useState(false);
 
     // Fetch
-    
+
     const getDataFromAPI = async() => {
         const URL_user = process.env.REACT_APP_API_URL+"/users/"+user_id;
         try{
@@ -42,9 +42,13 @@ const SingleUser = () => {
         getDataFromAPI();
     }, []);
 
+    // Wait for data
+
     if(!isLoaded){
         return <Loading></Loading>
     }
+
+    // View
 
     if(error){
         return(

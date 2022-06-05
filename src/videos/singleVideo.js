@@ -32,7 +32,7 @@ const SingleVideo = (props) => {
         let response = await fetch(URL_video);
         const dataVideo = await response.json();
 
-        let youtube_id = parseYoutubeURL(dataVideo.link_video)
+        let youtube_id = parseYoutubeURL(dataVideo.link_video);
         dataVideo.link_video = "https://www.youtube.com/embed/"+youtube_id;
 
         setVideo(dataVideo);
