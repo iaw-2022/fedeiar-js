@@ -30,8 +30,11 @@ const NavigationBar = (props) => {
 
             setLoggedUser(dataUser);
             setLoaded(true);
-        } else{
+        } else if(response.status === 404){
             navigate(`/users/register`);
+        } else{
+            const error = await response.json();
+            console.log(error);
         }
     }
 

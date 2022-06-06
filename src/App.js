@@ -14,41 +14,35 @@ import SingleUserRuns from './users/singleUserRuns';
 import SingleUserProfile from './users/singleUserProfile';
 import CreateVideo from './videos/createVideo';
 import EditVideo from './videos/editVideo';
-import UserRegisterFormulary from './users/userRegisterFormulary';
+import CreateUser from './users/createUser';
+import EditUser from './users/editUser.js'
 import { useEffect, useState } from 'react';
 
 function App() {
 
     const [loggedUser, setLoggedUser] = useState(null);
 
-    function updateUser(user) {
-        setLoggedUser(user);
-    }
-
-    useEffect( () => { 
-        //console.log(loggedUser);
-    }, [loggedUser])
-
     return (
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path='/' element={<NavigationBar updateUser={updateUser} />}>
+                    <Route path='/' element={<NavigationBar updateUser={setLoggedUser} />}>
                         <Route index element={<Home />} />
                         <Route path='games' element={<Games />} />
                         <Route path='games/:game_id' element={<Videos />}/>
                         <Route path='games/:game_id/create' element={<CreateVideo />}/>
-                        <Route path='games/:game_id/:video_id' element={<SingleVideo loggedUser={loggedUser}/>}/>
+                        <Route path='games/:game_id/:video_id' element={<SingleVideo loggedUser={loggedUser} />}/>
                         <Route path='games/:game_id/:video_id/edit' element={<EditVideo />}/>
                         <Route path='users' element={<Users />}/>
                         <Route path='users/:user_id/' element={<SingleUser />}>
                             <Route index element={<SingleUserRuns />} />
-                            <Route path='profile' element={<SingleUserProfile />} />
+                            <Route path='profile' element={<SingleUserProfile loggedUser={loggedUser} />} />
                         </Route>
+                        <Route path='users/:user_id/profile/edit' element={<EditUser loggedUser={loggedUser} />} />
                         <Route path='about' element={<About />} />
                         <Route path='*' element={<Navigate replace to="/" />} />
                     </Route>
-                    <Route path='/users/register' element={<UserRegisterFormulary />}/>
+                    <Route path='/users/register' element={<CreateUser />}/>
                 </Routes>
             </BrowserRouter>
         </div>

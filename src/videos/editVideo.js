@@ -25,7 +25,6 @@ const EditVideo = () => {
     const [seconds, setSeconds] = useState('');
     
     const [categories, setCategories] = useState([]);
-    const [video, setVideos] = useState([]);
     const [isLoaded, setLoaded] = useState(false);
 
     const navigate = useNavigate();
@@ -41,7 +40,6 @@ const EditVideo = () => {
         const URLVideo = process.env.REACT_APP_API_URL+"/videos/"+video_id;
         const responseVideo = await fetch(URLVideo);
         const dataVideo = await responseVideo.json();
-        setVideos(dataVideo);
 
         setCategorySelected(dataVideo.category_id);
         setYoutubeURL(dataVideo.link_video);
@@ -89,7 +87,7 @@ const EditVideo = () => {
 
     // Wait for data.
 
-    if(!isAuthenticated){
+    if(!isAuthenticated){ // TODO: habría que ver además de que esté autenticado, que le corresponda el video?
         return (
             <h1 className="display-4 text-center">Don't even try to bypass the logging.</h1>
         )

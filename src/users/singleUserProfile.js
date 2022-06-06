@@ -1,10 +1,10 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import { Button, Stack } from "react-bootstrap";
+import { Button, Stack, Modal } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 
 
-const SingleUserProfile = () => {
+const SingleUserProfile = (props) => {
 
     // Parameters
 
@@ -12,12 +12,19 @@ const SingleUserProfile = () => {
 
     // auth0
 
-    const { isAuthenticated } = useAuth0();
+    const { isAuthenticated, getAccessTokenSilently, logout } = useAuth0();
 
     // Hooks
 
     const [user, setUser] = useState([]);
     const [isLoaded, setLoaded] = useState(false);
+    
+    const [showModal, setShowModal] = useState(false);
+
+    // Modal
+
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
 
     // Fetch
 
@@ -33,6 +40,31 @@ const SingleUserProfile = () => {
     useEffect( () => {
         getDataFromAPI();
     }, []);
+
+    // Delete user
+
+    const handleUserDelete = async () => {
+        const token = await getAccessTokenSilently();
+        try{
+            const response = await fetch(process.env.REACT_APP_API_URL+`/users/${user_id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+            });
+            
+            if(response.status === 204){
+                logout({ returnTo: window.location.origin })
+                // navigate(`/`);
+            } else{
+                let error = await response.json();
+                console.log(error);
+            }
+        } catch(error){
+            console.log(error);
+        }
+    }
     
     // Wait for data
     
@@ -43,11 +75,11 @@ const SingleUserProfile = () => {
     }
 
     let updateDeleteButtons = null;
-    if(isAuthenticated){ // TODO: y tambien si el video le pertenece (para eso tendriamos que saber si el user_id asociado al video corresponde al del usuario logueado)
+    if(isAuthenticated  && props.loggedUser != null && props.loggedUser.id == user_id){ // TODO: preguntar
         updateDeleteButtons = (
             <Stack direction="horizontal" gap={3}>
-                <Link to={`/`}><Button variant="info">Edit profile</Button></Link>
-                <Button variant="danger">Delete account</Button>
+                <Link to={`/users/${user_id}/profile/edit`}><Button variant="info">Edit profile</Button></Link>
+                <Button variant="danger" onClick={handleShow}>Delete account</Button>
             </Stack>
         );
     }
@@ -66,6 +98,23 @@ const SingleUserProfile = () => {
             <hr></hr>
 
             {updateDeleteButtons}
+
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Danger zone: delete account</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete your account? all your videos will be deleted.</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant="danger" onClick={handleUserDelete}>
+                        Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+
         </div>
     );
 

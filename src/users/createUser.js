@@ -4,7 +4,7 @@ import { Button, Col, Container, Form, Row, Stack, Modal } from "react-bootstrap
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../layouts/header";
 
-const UserRegisterFormulary = () => {
+const CreateUser = () => {
 
     // auth0
 
@@ -14,6 +14,7 @@ const UserRegisterFormulary = () => {
 
     const [username , setUsername] = useState("");
     const [nationality, setNationality] = useState("");
+    
     const [showModal, setShowModal] = useState(false);
     const navigate = useNavigate();
 
@@ -121,4 +122,4 @@ const UserRegisterFormulary = () => {
     );
 }
 
-export default UserRegisterFormulary;
+export default CreateUser;
