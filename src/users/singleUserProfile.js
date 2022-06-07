@@ -75,7 +75,7 @@ const SingleUserProfile = (props) => {
     }
 
     let updateDeleteButtons = null;
-    if(isAuthenticated  && props.loggedUser != null && props.loggedUser.id == user_id){ // TODO: preguntar
+    if(isAuthenticated && props.loggedUser != null && props.loggedUser.id == user_id){
         updateDeleteButtons = (
             <Stack direction="horizontal" gap={3}>
                 <Link to={`/users/${user_id}/profile/edit`}><Button variant="info">Edit profile</Button></Link>

@@ -11,7 +11,7 @@ const NavigationBar = (props) => {
 
     // Hooks
 
-    const [loggedUser, setLoggedUser] = useState(null);
+    const [loggedUser, setLoggedUser] = useState(null); // TODO: en vez de definir de nuevo a loggedUser, usar el que viene de app.js
     const [isLoaded, setLoaded] = useState(false);
     const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const NavigationBar = (props) => {
             const dataUser = await response.json();
             props.updateUser(dataUser);
 
-            setLoggedUser(dataUser);
+            setLoggedUser(dataUser); // TODO: en vez de definir de nuevo a loggedUser, usar el que viene de app.js
             setLoaded(true);
         } else if(response.status === 404){
             navigate(`/users/register`);
@@ -48,6 +48,8 @@ const NavigationBar = (props) => {
     useEffect( () => {
         if(isAuthenticated){
             getUserFromAPI();
+        } else{
+            // TODO: borrar el usuario logueado.
         }
     }, [isAuthenticated]);
 

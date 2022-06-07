@@ -15,7 +15,6 @@ const EditUser = (props) => {
     // props
 
     let loggedUser = props.loggedUser;
-    console.log(loggedUser);
 
     // auth0
 
