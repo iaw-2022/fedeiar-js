@@ -147,7 +147,7 @@ const Videos = () => {
                                         pagination
                                         paginationComponentOptions={paginationComponentOptions}
                                         dense
-                                        defaultSortFieldId={5}
+                                        defaultSortFieldId={1}
                                         responsive
                                         // striped
                                     />

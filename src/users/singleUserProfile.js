@@ -46,7 +46,7 @@ const SingleUserProfile = (props) => {
     const handleUserDelete = async () => {
         const token = await getAccessTokenSilently();
         try{
-            const response = await fetch(process.env.REACT_APP_API_URL+`/users/${user_id}`, {
+            const response = await fetch(process.env.REACT_APP_API_URL+`/users`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -88,6 +88,7 @@ const SingleUserProfile = (props) => {
 
     return(
         <div>
+            
             <h3 className="text-start pb-2">Profile</h3>
 
             <p className="fs-5">username: {user.user_name}</p>
@@ -113,7 +114,6 @@ const SingleUserProfile = (props) => {
                     </Button>
                 </Modal.Footer>
             </Modal>
-
 
         </div>
     );

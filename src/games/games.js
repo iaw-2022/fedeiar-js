@@ -8,6 +8,7 @@ import Loading from "../layouts/loading";
 const Games = () => {
 
     // Hooks
+
     const [games, setGames] = useState([]);
     const [search, setSearch] = useState("");
     const [isLoaded, setLoaded] = useState(false);
@@ -47,6 +48,7 @@ const Games = () => {
 
     return(
         <div>
+
             <Header><h1 className="display-3">Games</h1></Header>
 
             <Body>
@@ -68,8 +70,8 @@ const Games = () => {
                 </Row>
 
             </Body>
+
         </div>
-        
     );
 }
 

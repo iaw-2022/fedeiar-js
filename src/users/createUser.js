@@ -92,7 +92,6 @@ const CreateUser = () => {
                         <hr></hr>
 
                         <Stack direction="horizontal" gap={3}>
-                            {/* <Link  to={`/games/${game_id}`} className="btn btn-danger">Go back</Link> */}
                             <Button variant="primary" type="submit">Register</Button>
                             <Button variant="danger" onClick={() => { logout({ returnTo: window.location.origin }) }}>Log out</Button>
                         </Stack>

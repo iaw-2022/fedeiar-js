@@ -19,11 +19,18 @@ const NavigationBar = (props) => {
 
     const getUserFromAPI = async () => {
         const token = await getAccessTokenSilently();
-        let response = await fetch(process.env.REACT_APP_API_URL+"/user_logged", {
-            headers: {
-                authorization: `Bearer ${token}`
-            }
-        });
+        let response;
+        try{
+            response = await fetch(process.env.REACT_APP_API_URL+"/user_logged", {
+                headers: {
+                    authorization: `Bearer ${token}`
+                }
+            });
+        } catch(error){
+            console.log(error);
+            return;
+        }
+
         if(response.status === 200){
             const dataUser = await response.json();
             props.updateUser(dataUser);

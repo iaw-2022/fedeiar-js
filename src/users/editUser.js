@@ -17,7 +17,7 @@ const EditUser = (props) => {
     let loggedUser = props.loggedUser;
     console.log(loggedUser);
 
-    // auth 0
+    // auth0
 
     const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
@@ -30,13 +30,11 @@ const EditUser = (props) => {
 
     const navigate = useNavigate();
     
-
     // Modal
 
     const handleClose = () => setShowModal(false);
     const handleShow = () => setShowModal(true);
     
-
     // Fetch
 
     const loadUserData = async () => {
@@ -62,7 +60,7 @@ const EditUser = (props) => {
         const user = {user_name: username, nationality: nationality}
         const token = await getAccessTokenSilently();
         try{
-            const response = await fetch(process.env.REACT_APP_API_URL+`/users/${user_id}`, {
+            const response = await fetch(process.env.REACT_APP_API_URL+`/users`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -86,7 +84,6 @@ const EditUser = (props) => {
 
     }
 
-
     // Wait for data
 
     if(!isAuthenticated){ // TODO: habría que ver además de que esté autenticado, que le corresponda el video?
@@ -100,7 +97,6 @@ const EditUser = (props) => {
             <Header><h2 className="display-5">Loading...</h2></Header>
         )
     }
-
 
     // View
 
