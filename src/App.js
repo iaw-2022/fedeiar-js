@@ -16,7 +16,7 @@ import CreateVideo from './videos/createVideo';
 import EditVideo from './videos/editVideo';
 import CreateUser from './users/createUser';
 import EditUser from './users/editUser.js'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function App() {
 

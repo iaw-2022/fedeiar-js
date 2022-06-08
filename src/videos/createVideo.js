@@ -1,9 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Row, Stack } from "react-bootstrap";
+import { Button, Col, Form, Row, Stack, Modal } from "react-bootstrap";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Header from "../layouts/header";
-import { TimeToSeconds } from "../utilities/util";
+import { parseYoutubeURL, TimeToSeconds } from "../utilities/util";
 
 
 const CreateVideo = () => {
@@ -27,7 +27,14 @@ const CreateVideo = () => {
     const [categories, setCategories] = useState([]);
     const [isLoaded, setLoaded] = useState(false);
 
+    const [showModal, setShowModal] = useState(false);
+
     const navigate = useNavigate();
+
+    // Modal
+
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
 
     // Fetch
 
@@ -49,6 +56,24 @@ const CreateVideo = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Evita que se refresheen los campos después de dar submit.
+        
+        try{
+            const youtube_id = parseYoutubeURL(youtubeURL);
+            if (youtube_id == null){
+                throw new Error();
+            }
+            const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${youtube_id}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`);
+            if(response.status != 200){
+                throw new Error();
+            }
+            const dataResponse = await response.json();
+            if(dataResponse.items.length == 0){
+                throw new Error();
+            }
+        }catch(error){
+            handleShow();
+            return;
+        }
         
         const video = {"game_id": game_id, "category_id": categorySelectedId, "link": youtubeURL, "time": TimeToSeconds(hours, minutes, seconds)};
         
@@ -138,6 +163,18 @@ const CreateVideo = () => {
                 </Stack>
 
             </Form>
+
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Error: invalid youtube link</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Use a valid youtube URL for an existing video.</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             
         </div>
     )

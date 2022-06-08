@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import Body from "../layouts/body";
 import Header from "../layouts/header";
 import Loading from "../layouts/loading";
-import { SecondsToTime } from "../utilities/util";
+import { parseYoutubeURL, SecondsToTime } from "../utilities/util";
 
 
 const SingleVideo = (props) => {
@@ -93,7 +93,7 @@ const SingleVideo = (props) => {
             <Header><h2 className="display-5 text-start">{video.game_name}</h2></Header>
 
             <Body>
-                <div>
+                <div className="mb-2">
                     <object
                         data={video.link_video}
                         frameBorder="0"
@@ -104,7 +104,7 @@ const SingleVideo = (props) => {
                 </div>
 
                 <div>
-                    <p className="text-start">Run done by: {video.user_name}</p>
+                   <p className="text-start">Run done by: <Link to={`/users/${video.user_id}`}>{video.user_name}</Link></p>
                     <p className="text-start">Category: {video.category_name}</p>
                     <p className="text-start">Done in: {SecondsToTime(video.completion_time_seconds)}</p>
                 </div>
@@ -124,12 +124,4 @@ const SingleVideo = (props) => {
     );
 }
 
-function parseYoutubeURL(URL){
-    let video_id = URL.split('v=')[1];
-    let ampersandPosition = video_id.indexOf('&');
-    if(ampersandPosition != -1) {
-        video_id = video_id.substring(0, ampersandPosition);
-    }
-    return video_id
-}
 export default SingleVideo;
