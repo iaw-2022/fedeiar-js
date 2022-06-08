@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import { Button, Stack } from "react-bootstrap";
+import { Button, Stack, Modal } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Body from "../layouts/body";
 import Header from "../layouts/header";
@@ -13,7 +13,7 @@ const SingleVideo = (props) => {
     // Parameters
 
     const { game_id, video_id } = useParams();
-    console.log("hola");
+    
     // auth0
 
     const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
@@ -24,6 +24,13 @@ const SingleVideo = (props) => {
     const [isLoaded, setLoaded] = useState(false);
 
     const navigate = useNavigate();
+
+    const [showModal, setShowModal] = useState(false);
+
+    // Modal
+
+    const handleCloseModal = () => setShowModal(false);
+    const handleShowModal = () => setShowModal(true);
 
     // Fetch
 
@@ -45,7 +52,7 @@ const SingleVideo = (props) => {
 
     // Handle Delete
 
-    const handleDelete = async () => {
+    const handleVideoDelete = async () => {
         const token = await getAccessTokenSilently();
         try{
             const response = await fetch(process.env.REACT_APP_API_URL+"/videos/"+video_id, {
@@ -81,7 +88,7 @@ const SingleVideo = (props) => {
         updateDeleteButtons = (
             <Stack direction="horizontal" gap={3}>
                 <Link to={`/games/${game_id}/${video_id}/edit`}><Button variant="info">Edit video</Button></Link>
-                <Button onClick={handleDelete} variant="danger">Delete video</Button>
+                <Button onClick={handleShowModal} variant="danger">Delete video</Button>
             </Stack>
         );
     }
@@ -90,6 +97,7 @@ const SingleVideo = (props) => {
 
     return(
         <div>
+
             <Header><h2 className="display-5 text-start">{video.game_name}</h2></Header>
 
             <Body>
@@ -97,8 +105,8 @@ const SingleVideo = (props) => {
                     <object
                         data={video.link_video}
                         frameBorder="0"
-                        allowFullScreen   
-                        width="640" 
+                        allowFullScreen
+                        width="640"
                         height="360"
                     />
                 </div>
@@ -117,9 +125,23 @@ const SingleVideo = (props) => {
                     <Link to={`/games/${game_id}`}><Button variant="primary">Go to videos of the game</Button></Link>
                     <Link to={`/users/${video.user_id}`}><Button variant="primary">Go to user's profile</Button></Link>
                 </Stack>
-
-                
             </Body>
+
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Danger zone: delete speedrun</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete the speedrun?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                    <Button variant="danger" onClick={handleVideoDelete}>
+                        Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
         </div>
     );
 }
