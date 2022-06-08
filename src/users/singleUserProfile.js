@@ -10,6 +10,11 @@ const SingleUserProfile = (props) => {
 
     const { user_id } = useParams();
 
+    // props
+
+    let loggedUser = props.loggedUser;
+    console.log(loggedUser);
+
     // auth0
 
     const { isAuthenticated, getAccessTokenSilently, logout } = useAuth0();
@@ -75,10 +80,10 @@ const SingleUserProfile = (props) => {
     }
 
     let updateDeleteButtons = null;
-    if(isAuthenticated && props.loggedUser != null && props.loggedUser.id == user_id){
+    if(isAuthenticated && loggedUser != null && loggedUser.id == user_id){
         updateDeleteButtons = (
             <Stack direction="horizontal" gap={3}>
-                <Link to={`/users/${user_id}/profile/edit`}><Button variant="info">Edit profile</Button></Link>
+                <Link to={`/users/profile/edit`}><Button variant="info">Edit profile</Button></Link>
                 <Button variant="danger" onClick={handleShow}>Delete account</Button>
             </Stack>
         );
@@ -88,7 +93,7 @@ const SingleUserProfile = (props) => {
 
     return(
         <div>
-            
+
             <h3 className="text-start pb-2">Profile</h3>
 
             <p className="fs-5">username: {user.user_name}</p>

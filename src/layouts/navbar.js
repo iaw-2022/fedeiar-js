@@ -9,9 +9,12 @@ const NavigationBar = (props) => {
     
     const {isAuthenticated, loginWithPopup, logout, user, getAccessTokenSilently} = useAuth0();
 
+    // props
+
+    let loggedUser = props.loggedUser; 
+    
     // Hooks
 
-    const [loggedUser, setLoggedUser] = useState(null); // TODO: en vez de definir de nuevo a loggedUser, usar el que viene de app.js
     const [isLoaded, setLoaded] = useState(false);
     const navigate = useNavigate();
 
@@ -35,7 +38,7 @@ const NavigationBar = (props) => {
             const dataUser = await response.json();
             props.updateUser(dataUser);
 
-            setLoggedUser(dataUser); // TODO: en vez de definir de nuevo a loggedUser, usar el que viene de app.js
+            loggedUser = dataUser;
             setLoaded(true);
         } else if(response.status === 404){
             navigate(`/users/register`);

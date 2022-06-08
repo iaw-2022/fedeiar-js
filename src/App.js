@@ -26,19 +26,19 @@ function App() {
         <div className="App">
             <BrowserRouter>
                 <Routes>
-                    <Route path='/' element={<NavigationBar updateUser={setLoggedUser} />}>
+                    <Route path='/' element={<NavigationBar updateUser={setLoggedUser} loggedUser={loggedUser} />}>
                         <Route index element={<Home />} />
                         <Route path='games' element={<Games />} />
-                        <Route path='games/:game_id' element={<Videos />}/>
-                        <Route path='games/:game_id/create' element={<CreateVideo />}/>
-                        <Route path='games/:game_id/:video_id' element={<SingleVideo loggedUser={loggedUser} />}/>
-                        <Route path='games/:game_id/:video_id/edit' element={<EditVideo />}/>
-                        <Route path='users' element={<Users />}/>
+                        <Route path='games/:game_id' element={<Videos />} />
+                        <Route path='games/:game_id/create' element={<CreateVideo />} />
+                        <Route path='games/:game_id/:video_id' element={<SingleVideo loggedUser={loggedUser} />} />
+                        <Route path='games/:game_id/:video_id/edit' element={<EditVideo loggedUser={loggedUser} />} />
+                        <Route path='users' element={<Users />} />
                         <Route path='users/:user_id/' element={<SingleUser />}>
                             <Route index element={<SingleUserRuns />} />
                             <Route path='profile' element={<SingleUserProfile loggedUser={loggedUser} />} />
                         </Route>
-                        <Route path='users/:user_id/profile/edit' element={<EditUser loggedUser={loggedUser} />} />
+                        <Route path='users/profile/edit' element={<EditUser updateUser={setLoggedUser} loggedUser={loggedUser} />} />
                         <Route path='about' element={<About />} />
                         <Route path='*' element={<Navigate replace to="/" />} />
                     </Route>

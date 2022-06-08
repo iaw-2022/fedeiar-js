@@ -8,10 +8,6 @@ import Header from "../layouts/header";
 
 const EditUser = (props) => {
 
-    // parameters
-
-    const { user_id } = useParams();
-
     // props
 
     let loggedUser = props.loggedUser;
@@ -69,8 +65,10 @@ const EditUser = (props) => {
             });
             
             if(response.status === 204){
-                window.location.replace(`/users/${user_id}/profile`);
-                // navigate(`/users/${user_id}/profile`, { replace: true });
+                loggedUser.user_name = username;
+                loggedUser.nationality = nationality;
+                props.updateUser(loggedUser);
+                navigate(`/users/${loggedUser.id}/profile`);
             } else if(response.status === 400){
                 handleShow();
             } else{
@@ -85,16 +83,16 @@ const EditUser = (props) => {
 
     // Wait for data
 
-    if(!isAuthenticated){ // TODO: habría que ver además de que esté autenticado, que le corresponda el video?
-        return (
+    if(!isAuthenticated){
+        return(
             <h1 className="display-4 text-center">Don't even try to bypass the logging.</h1>
-        )
+        );
     }
 
     if(!isLoaded){
         return(
             <Header><h2 className="display-5">Loading...</h2></Header>
-        )
+        );
     }
 
     // View
@@ -120,7 +118,7 @@ const EditUser = (props) => {
                     <hr></hr>
 
                     <Stack direction="horizontal" gap={3}>
-                        <Link to={`/users/${user_id}/profile`} className="btn btn-danger">Go back</Link>
+                        <Link to={`/users/${loggedUser.id}/profile`} className="btn btn-danger">Go back</Link>
                         <Button variant="primary" type="submit">Edit</Button>
                     </Stack>
 

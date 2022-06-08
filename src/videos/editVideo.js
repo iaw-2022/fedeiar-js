@@ -6,11 +6,15 @@ import Header from "../layouts/header";
 import { SecondsToTimeToArray, TimeToSeconds } from "../utilities/util";
 
 
-const EditVideo = () => {
+const EditVideo = (props) => {
 
     // auth0
 
     const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+    // props
+
+    let loggedUser = props.loggedUser;
 
     // Parameters
 
@@ -25,6 +29,7 @@ const EditVideo = () => {
     const [seconds, setSeconds] = useState('');
     
     const [categories, setCategories] = useState([]);
+    const [video, setVideo] = useState(null);
     const [isLoaded, setLoaded] = useState(false);
 
     const navigate = useNavigate();
@@ -32,6 +37,9 @@ const EditVideo = () => {
     // Fetch
 
     const getDataFromAPI = async() => {
+        if(loggedUser == null){
+            return;
+        }
         const URLCategories = process.env.REACT_APP_API_URL+"/categories/"+game_id;
         const responseCategories = await fetch(URLCategories);
         const dataCategories = await responseCategories.json();
@@ -40,6 +48,7 @@ const EditVideo = () => {
         const URLVideo = process.env.REACT_APP_API_URL+"/videos/"+video_id;
         const responseVideo = await fetch(URLVideo);
         const dataVideo = await responseVideo.json();
+        setVideo(dataVideo);
 
         setCategorySelected(dataVideo.category_id);
         setYoutubeURL(dataVideo.link_video);
@@ -53,7 +62,7 @@ const EditVideo = () => {
 
     useEffect(() => {
         getDataFromAPI();
-    }, []);
+    }, [loggedUser]);
 
     // Handle update
 
@@ -82,12 +91,11 @@ const EditVideo = () => {
         } catch(error){
             console.log(error);
         }
-        
     }
 
     // Wait for data.
 
-    if(!isAuthenticated){ // TODO: habría que ver además de que esté autenticado, que le corresponda el video?
+    if(!isAuthenticated){
         return (
             <h1 className="display-4 text-center">Don't even try to bypass the logging.</h1>
         )
@@ -96,6 +104,12 @@ const EditVideo = () => {
     if(!isLoaded){
         return(
             <Header><h2 className="display-5">Loading...</h2></Header>
+        )
+    }
+
+    if(loggedUser.id != video.user_id){ // TODO: preguntar si está bien
+        return(
+            <h1 className="display-4 text-center">Editing other user's videos? Get out!</h1>
         )
     }
 

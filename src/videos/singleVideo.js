@@ -13,7 +13,7 @@ const SingleVideo = (props) => {
     // Parameters
 
     const { game_id, video_id } = useParams();
-
+    console.log("hola");
     // auth0
 
     const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
@@ -94,8 +94,8 @@ const SingleVideo = (props) => {
 
             <Body>
                 <div>
-                    <iframe
-                        src={video.link_video}
+                    <object
+                        data={video.link_video}
                         frameBorder="0"
                         allowFullScreen   
                         width="640" 
