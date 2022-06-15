@@ -1,7 +1,3 @@
-.App {
-  /* text-align: left; */
-}
-
 section {
     background-color:bisque;
     min-height: 100vh;
@@ -9,6 +5,11 @@ section {
 
 .bg-color {
     background-color:bisque;
+}
+
+.card {
+    width: "100%";
+    height: "100%";
 }
 
 /* .rdt_TableCol {

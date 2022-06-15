@@ -1,4 +1,4 @@
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Header from "../layouts/header";
@@ -55,14 +55,14 @@ const Games = () => {
             
                 <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4 w-25" />
 
-                <Row xs={1} sm={2} md={5} lg={8} className="g-4">
+                <Row xs={1} sm={2} md={5} lg={8} className="g-2">
                     {searchedGames.map( (game, idx) => (
                         <Col key={game.id}>
-                            <Card bg="dark" text="light">
+                            <Card /* className="card" */ style={{width: "100%", height:"100%"}} bg="dark" text="light">
                                 <Card.Img variant="top" src="/joystick.png"/>
-                                <Card.Body>
-                                    <Card.Title className="text-start pb-2">{game.game_name}</Card.Title>
-                                    <Link to={"/games/"+game.id}><Button variant="primary">Videos of {game.game_name}</Button></Link>
+                                <Card.Body className="text-center d-flex flex-column">
+                                    <Card.Title className="">{game.game_name}</Card.Title>
+                                    <Link className="mt-auto" to={"/games/"+game.id} ><Button variant="primary">Videos of {game.game_name}</Button></Link>
                                 </Card.Body>
                             </Card>
                         </Col>
