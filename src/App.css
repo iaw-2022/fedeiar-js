@@ -1,0 +1,30 @@
+.App {
+  /* text-align: left; */
+}
+
+section {
+    background-color:bisque;
+    min-height: 100vh;
+}
+
+.bg-color {
+    background-color:bisque;
+}
+
+/* .rdt_TableCol {
+    background-color: #282c34;
+    color:skyblue;
+
+}
+
+.rdt_TableCell{
+    background-color:grey;
+    border-spacing: 2px;
+    border-collapse: separate;
+    border: 1px solid black;
+}
+
+.rdt_TableRow {
+    border-width: "10px";
+    border-style: solid;
+} */
