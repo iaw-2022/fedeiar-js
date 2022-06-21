@@ -122,8 +122,8 @@ const SingleVideo = (props) => {
                 <hr></hr>
 
                 <Stack direction="horizontal" gap={3}>
-                    <Link to={`/games/${game_id}`}><Button variant="primary">Go to videos of the game</Button></Link>
-                    <Link to={`/users/${video.user_id}`}><Button variant="primary">Go to user's profile</Button></Link>
+                    <Link to={`/games/${game_id}`}><Button variant="primary">Videos of the game</Button></Link>
+                    <Link to={`/users/${video.user_id}`}><Button variant="primary">User's profile</Button></Link>
                 </Stack>
             </Body>
 
