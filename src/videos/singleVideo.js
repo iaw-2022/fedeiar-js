@@ -106,8 +106,8 @@ const SingleVideo = (props) => {
                         data={video.link_video}
                         frameBorder="0"
                         allowFullScreen
-                        width="640"
-                        height="360"
+                        width={640}
+                        height={360}
                     />
                 </div>
 
