@@ -55,15 +55,15 @@ const Games = () => {
             
                 <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4 w-25" />
 
-                <Row xs={1} sm={2} md={5} lg={8} className="g-3">
-                    {searchedGames.map( (game, idx) => (
-                        <Col key={game.id}>
+                <Row /* xs={1} sm={2} md={4} lg={8} */ className="g-3">
+                    {searchedGames.map( (game) => (
+                        <Col sm="auto"  md="auto" lg="auto" key={game.id}>
                             <Card className="card" bg="dark" text="light">
                                 <Card.Img variant="top" src={`${process.env.REACT_APP_API_URL}/games/image/${game.id}`} width={200} height={150}/>
                                 {/* <Card.Img variant="top" src={game.image} width={200} height={150}/> */}
                                 <Card.Body className="text-center d-flex flex-column">
                                     <Card.Title className="">{game.game_name}</Card.Title>
-                                    <Link className="mt-auto" to={"/games/"+game.id} ><Button variant="primary">Videos</Button></Link>
+                                    <Button as={Link} to={"/games/"+game.id} className="mt-auto" variant="primary">Videos</Button>
                                 </Card.Body>
                             </Card>
                         </Col>
