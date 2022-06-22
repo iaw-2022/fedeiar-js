@@ -1,6 +1,6 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import { Button, Stack, Modal } from "react-bootstrap";
+import { Button, Stack, Modal, Container } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Body from "../layouts/body";
 import Header from "../layouts/header";
@@ -101,15 +101,17 @@ const SingleVideo = (props) => {
             <Header><h2 className="display-5 text-start">{video.game_name}</h2></Header>
 
             <Body>
+                
                 <div className="mb-2">
                     <object
                         data={video.link_video}
                         frameBorder="0"
                         allowFullScreen
-                        width={640}
-                        height={360}
+                        width="640"
+                        height="360"
                     />
                 </div>
+                
 
                 <div>
                    <p className="text-start">Run done by: <Link to={`/users/${video.user_id}`}>{video.user_name}</Link></p>

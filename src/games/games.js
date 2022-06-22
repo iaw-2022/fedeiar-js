@@ -59,8 +59,8 @@ const Games = () => {
                     {searchedGames.map( (game, idx) => (
                         <Col key={game.id}>
                             <Card className="card" bg="dark" text="light">
-                                {/* <Card.Img variant="top" src={"https://i.picsum.photos/id/566/200/300.jpg?hmac=gDpaVMLNupk7AufUDLFHttohsJ9-C17P7L-QKsVgUQU"}/> */}
-                                <Card.Img variant="top" src={game.image} width={200} height={150}/>
+                                <Card.Img variant="top" src={`${process.env.REACT_APP_API_URL}/games/image/${game.id}`} width={200} height={150}/>
+                                {/* <Card.Img variant="top" src={game.image} width={200} height={150}/> */}
                                 <Card.Body className="text-center d-flex flex-column">
                                     <Card.Title className="">{game.game_name}</Card.Title>
                                     <Link className="mt-auto" to={"/games/"+game.id} ><Button variant="primary">Videos</Button></Link>

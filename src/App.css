@@ -12,6 +12,10 @@ section {
     height: 100%;
 }
 
+iframe, object, embed {
+    max-width: 100%;
+}
+
 /* .rdt_TableCol {
     background-color: #282c34;
     color:skyblue;
