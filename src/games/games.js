@@ -57,7 +57,7 @@ const Games = () => {
 
                 <Row /* xs={1} sm={2} md={4} lg={8} */ className="g-3">
                     {searchedGames.map( (game) => (
-                        <Col sm="auto"  md="auto" lg="auto" key={game.id}>
+                        <Col xs="auto" sm="auto" md="auto" lg="auto" key={game.id}>
                             <Card className="card" bg="dark" text="light">
                                 <Card.Img variant="top" src={`${process.env.REACT_APP_API_URL}/games/image/${game.id}`} width={200} height={150}/>
                                 {/* <Card.Img variant="top" src={game.image} width={200} height={150}/> */}
