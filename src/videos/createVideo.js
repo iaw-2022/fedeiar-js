@@ -134,7 +134,7 @@ const CreateVideo = () => {
                 <Form.Group className="mb-3">
                     <Form.Label>Enter youtube link video</Form.Label>
                     <Form.Control required type="url" value={youtubeURL} onChange={(e) => setYoutubeURL(e.target.value)} placeholder="youtube URL" />
-                    <Form.Text className="text-muted">
+                    <Form.Text className="text-white-50">
                         Important: it MUST be an URL ONLY from youtube, for example: https://www.youtube.com/watch?v=L4ZuuVG_QtM
                     </Form.Text>
                 </Form.Group>
@@ -143,13 +143,13 @@ const CreateVideo = () => {
                     <Form.Label>Completion time</Form.Label>
                     <Row>
                         <Col>
-                            <Form.Control required type="number" value={hours} onChange={(e) => setHours(e.target.value)} placeholder="Hours"/>
+                            <Form.Control required type="number" min="0" max="9999" value={hours} onChange={(e) => setHours(e.target.value)} placeholder="Hours"/>
                         </Col>
                         <Col>
-                            <Form.Control required type="number" value={minutes} onChange={(e) => setMinutes(e.target.value)} placeholder="Minutes" />
+                            <Form.Control required type="number" min="0" max="59" value={minutes} onChange={(e) => setMinutes(e.target.value)} placeholder="Minutes" />
                         </Col>
                         <Col>
-                            <Form.Control required type="number" value={seconds} onChange={(e) => setSeconds(e.target.value)} placeholder="Seconds" />
+                            <Form.Control required type="number" min="0" max="59" value={seconds} onChange={(e) => setSeconds(e.target.value)} placeholder="Seconds" />
                         </Col>
                     </Row>
                 </Form.Group>

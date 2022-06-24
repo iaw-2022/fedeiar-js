@@ -52,7 +52,7 @@ const NavigationBar = (props) => {
         if(isAuthenticated){
             getUserFromAPI();
         } else{
-            // TODO: borrar el usuario logueado.
+            props.updateUser(null);
         }
     }, [isAuthenticated]);
 

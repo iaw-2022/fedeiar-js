@@ -79,10 +79,9 @@ const Users = () => {
                         theme="dark"
                         columns={columns}
                         data={users}
-                        pagination
+                        pagination={users.length > 10}
                         paginationComponentOptions={paginationComponentOptions}
                         dense
-                        // striped
                     />
                 </div>
 

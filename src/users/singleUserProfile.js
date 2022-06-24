@@ -95,10 +95,10 @@ const SingleUserProfile = (props) => {
 
             <h3 className="text-start pb-2">Profile</h3>
 
-            <p className="fs-5">username: {user.user_name}</p>
-            <p className="fs-5">email: {user.email}</p>
-            <p className="fs-5">from: {user.nationality}</p>
-            <p className="fs-5">joined in: {new Date(user.created_at).toLocaleDateString({day: '2-digit', month: '2-digit', year: 'numeric'})}</p>
+            <p className="lead"><strong>Username: {user.user_name}</strong></p>
+            <p className="lead"><strong>Email: {user.email}</strong></p>
+            <p className="lead"><strong>From: {user.nationality}</strong></p>
+            <p className="lead"><strong>Joined in: {new Date(user.created_at).toLocaleDateString({day: '2-digit', month: '2-digit', year: 'numeric'})}</strong></p>
 
             <hr></hr>
 

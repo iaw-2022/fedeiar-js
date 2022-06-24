@@ -1,7 +1,7 @@
 import { Button, Modal, Tab, Tabs } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import { useParams, useLocation, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Header from "../layouts/header";
 import Body from "../layouts/body";
 import { SecondsToTime } from "../utilities/util";
@@ -11,10 +11,13 @@ import Loading from "../layouts/loading";
 
 const Videos = () => {
 
-    const { isAuthenticated } = useAuth0();
+    // Parameters
 
     const { game_id } = useParams();
-    let categoriesWithVideos = [];
+
+    // auth0 
+
+    const { isAuthenticated } = useAuth0();
 
     // Hooks
     
@@ -23,16 +26,22 @@ const Videos = () => {
     const [showModal, setShowModal] = useState(false);
     const [isLoaded, setLoaded] = useState(false);
 
+    let categoriesWithVideos = [];
+
     // Fetch
 
     const getDataFromAPI = async () => {
         const URL_categories = process.env.REACT_APP_API_URL+"/categories/"+ game_id;
-        const responseCategories = await fetch(URL_categories);
+        const URL_videos = process.env.REACT_APP_API_URL+"/videos/game/"+ game_id;
+
+        let [responseCategories, responseVideos] = await Promise.all([
+            fetch(URL_categories),
+            fetch(URL_videos)
+        ]);
+
         const dataCategories = await responseCategories.json();
         setCategories(dataCategories);
 
-        const URL_videos = process.env.REACT_APP_API_URL+"/videos/game/"+ game_id;
-        const responseVideos = await fetch(URL_videos);
         let dataVideos = await responseVideos.json();
         dataVideos.sort((videoA, videoB) => videoA.completion_time_seconds - videoB.completion_time_seconds);
         setVideos(dataVideos);
@@ -144,12 +153,11 @@ const Videos = () => {
                                         theme="dark"
                                         columns={columns}
                                         data={category.videos}
-                                        pagination
+                                        pagination={category.videos.length > 10}
                                         paginationComponentOptions={paginationComponentOptions}
                                         dense
                                         defaultSortFieldId={1}
                                         responsive
-                                        // striped
                                     />
                                 </div>
                             </Tab>
@@ -170,7 +178,6 @@ const Videos = () => {
                 </Modal>
 
             </Body>
-            
         </div>
     )
 }

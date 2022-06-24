@@ -1,22 +1,21 @@
 section {
-    background-color:bisque;
-    min-height: 100vh;
+    background-color:darkslategray;
+    min-height: 125vh;
 }
 
-.bg-color {
-    background-color:bisque;
+div{
+    color:azure
 }
 
+.modal-title, .modal-body, .modal-footer {
+    color: black;
+}
 
 .card-img {
-    max-height: 20vh;
+    max-height: 15vh;
     object-fit: contain;
+/*     border-style: inset; */
 }
-
-/* img{
-    width:100%;
-    height:auto;
-}  */
 
 iframe, object, embed {
     max-width: 100%;

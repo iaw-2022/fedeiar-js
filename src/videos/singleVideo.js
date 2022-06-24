@@ -16,7 +16,7 @@ const SingleVideo = (props) => {
     
     // auth0
 
-    const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
+    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
     // Hooks
 
@@ -81,10 +81,9 @@ const SingleVideo = (props) => {
         )
     }
     
-
     let updateDeleteButtons = null;
     
-    if(isAuthenticated && props.loggedUser != null && props.loggedUser.id == video.user_id){ // TODO: preguntar
+    if(isAuthenticated && props.loggedUser != null && props.loggedUser.id == video.user_id){
         updateDeleteButtons = (
             <Stack direction="horizontal" gap={3}>
                 <Link to={`/games/${game_id}/${video_id}/edit`}><Button variant="info">Edit video</Button></Link>
@@ -112,11 +111,10 @@ const SingleVideo = (props) => {
                     />
                 </div>
                 
-
                 <div>
-                   <p className="text-start">Run done by: <Link to={`/users/${video.user_id}`}>{video.user_name}</Link></p>
-                    <p className="text-start">Category: {video.category_name}</p>
-                    <p className="text-start">Done in: {SecondsToTime(video.completion_time_seconds)}</p>
+                   <p className="text-start fs-5">Run done by: <strong><Link to={`/users/${video.user_id}`}>{video.user_name}</Link></strong></p>
+                    <p className="text-start fs-5">Category: <strong>{video.category_name}</strong></p>
+                    <p className="text-start fs-5">Done in: <strong>{SecondsToTime(video.completion_time_seconds)}</strong></p>
                 </div>
 
                 {updateDeleteButtons}
@@ -127,6 +125,7 @@ const SingleVideo = (props) => {
                     <Link to={`/games/${game_id}`}><Button variant="primary">Videos of the game</Button></Link>
                     <Link to={`/users/${video.user_id}`}><Button variant="primary">User's profile</Button></Link>
                 </Stack>
+
             </Body>
 
             <Modal show={showModal} onHide={handleCloseModal}>

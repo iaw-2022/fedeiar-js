@@ -84,12 +84,11 @@ const SingleUserRuns = () => {
                 theme="dark"
                 columns={columns}
                 data={userVideos}
-                pagination
+                pagination={userVideos.length > 10}
                 paginationComponentOptions={paginationComponentOptions}
                 dense
                 defaultSortFieldId={1}
                 responsive
-                // striped
             />
         </div>
     );

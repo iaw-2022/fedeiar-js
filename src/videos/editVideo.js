@@ -47,13 +47,17 @@ const EditVideo = (props) => {
         if(loggedUser == null){
             return;
         }
-        const URLCategories = process.env.REACT_APP_API_URL+"/categories/"+game_id;
-        const responseCategories = await fetch(URLCategories);
+        const URL_categories = process.env.REACT_APP_API_URL+"/categories/"+game_id;
+        const URL_video = process.env.REACT_APP_API_URL+"/videos/"+video_id;
+
+        let [responseCategories, responseVideo] = await Promise.all([
+            fetch(URL_categories),
+            fetch(URL_video)
+        ]);
+
         const dataCategories = await responseCategories.json();
         setCategories(dataCategories);
 
-        const URLVideo = process.env.REACT_APP_API_URL+"/videos/"+video_id;
-        const responseVideo = await fetch(URLVideo);
         const dataVideo = await responseVideo.json();
         setVideo(dataVideo);
 
@@ -132,7 +136,7 @@ const EditVideo = (props) => {
         )
     }
 
-    if(loggedUser.id != video.user_id){ // TODO: preguntar si está bien
+    if(loggedUser.id != video.user_id){
         return(
             <h1 className="display-4 text-center">Editing other user's videos? Get out!</h1>
         )
@@ -158,7 +162,7 @@ const EditVideo = (props) => {
                 <Form.Group className="mb-3">
                     <Form.Label>Enter youtube link video</Form.Label>
                     <Form.Control required type="url" value={youtubeURL} onChange={(e) => setYoutubeURL(e.target.value)} placeholder="youtube URL" />
-                    <Form.Text className="text-muted">
+                    <Form.Text className="text-white-50">
                         Important: it MUST be an URL ONLY from youtube, for example: https://www.youtube.com/watch?v=L4ZuuVG_QtM
                     </Form.Text>
                 </Form.Group>
@@ -167,18 +171,17 @@ const EditVideo = (props) => {
                     <Form.Label>Completion time</Form.Label>
                     <Row>
                         <Col>
-                            <Form.Control required type="number" value={hours} onChange={(e) => setHours(e.target.value)} placeholder="Hours"/>
+                            <Form.Control required type="number" min="0" max="9999" value={hours} onChange={(e) => setHours(e.target.value)} placeholder="Hours"/>
                         </Col>
                         <Col>
-                            <Form.Control required type="number" value={minutes} onChange={(e) => setMinutes(e.target.value)} placeholder="Minutes" />
+                            <Form.Control required type="number" min="0" max="59" value={minutes} onChange={(e) => setMinutes(e.target.value)} placeholder="Minutes" />
                         </Col>
                         <Col>
-                            <Form.Control required type="number" value={seconds} onChange={(e) => setSeconds(e.target.value)} placeholder="Seconds" />
+                            <Form.Control required type="number" min="0" max="59" value={seconds} onChange={(e) => setSeconds(e.target.value)} placeholder="Seconds" />
                         </Col>
                     </Row>
                 </Form.Group>
 
-                
                 <hr></hr>
 
                 <Stack direction="horizontal" gap={3}>

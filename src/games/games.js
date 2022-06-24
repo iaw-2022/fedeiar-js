@@ -55,7 +55,6 @@ const Games = () => {
             
                 <input type="text" value={search} onChange={searcher} placeholder="Search for a game" className="form-control mb-4 w-25" />
 
-               
                 <Row className="g-4">
                     {searchedGames.map( (game) => (
                         <Col className="col-12 col-md-6 col-lg-4 col-xl-3" key={game.id}>
@@ -70,7 +69,6 @@ const Games = () => {
                     ))}
                 </Row>
                 
-
             </Body>
 
         </div>
