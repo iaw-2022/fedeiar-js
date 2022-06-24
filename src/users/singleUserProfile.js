@@ -93,7 +93,7 @@ const SingleUserProfile = (props) => {
     return(
         <div>
 
-            <h3 className="text-start pb-2">Profile</h3>
+            <h2 className="display-6 text-start mb-3"><strong>Profile</strong></h2>
 
             <p className="lead"><strong>Username: {user.user_name}</strong></p>
             <p className="lead"><strong>Email: {user.email}</strong></p>

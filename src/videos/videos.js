@@ -155,7 +155,6 @@ const Videos = () => {
                                         data={category.videos}
                                         pagination={category.videos.length > 10}
                                         paginationComponentOptions={paginationComponentOptions}
-                                        dense
                                         defaultSortFieldId={1}
                                         responsive
                                     />

@@ -54,26 +54,25 @@ const CreateUser = () => {
 
     // Wait for data
 
-    if (!isAuthenticated) {
+    if(!isAuthenticated){
         return (
             <div>
                 <section>
                     <Container>
                         <Header><h1 className="display-5">You must be authenticated to complete the signup.</h1></Header>
-
                         <Link to="/"><Button variant="danger">Go to Home Page.</Button></Link>
                     </Container>
                 </section>
             </div>
-        )
+        );
     }
 
     // View
 
     return (
         <div>
-
             <section>
+
                 <Container>
                     <Header><h1 className="display-3">Complete registration!</h1></Header>
 
@@ -97,7 +96,6 @@ const CreateUser = () => {
                         </Stack>
 
                     </Form>
-
                 </Container>
 
                 <Modal show={showModal} onHide={handleClose}>
@@ -112,11 +110,7 @@ const CreateUser = () => {
                     </Modal.Footer>
                 </Modal>
 
-            
             </section>
-
-            
-
         </div>
     );
 }

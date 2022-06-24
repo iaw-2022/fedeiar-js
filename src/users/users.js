@@ -63,13 +63,14 @@ const Users = () => {
     if(!isLoaded){
         return(
             <Header><h2 className="display-5">Loading...</h2></Header>
-        )
+        );
     }
 
     // View
 
     return (
         <div>
+
             <Header><h1 className="display-3">Users</h1></Header>
 
             <Body>
@@ -88,7 +89,7 @@ const Users = () => {
             </Body>
             
         </div>
-    )
+    );
 }
 
 

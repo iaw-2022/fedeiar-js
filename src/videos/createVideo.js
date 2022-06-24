@@ -39,8 +39,8 @@ const CreateVideo = () => {
     // Fetch
 
     const getDataFromAPI = async() => {
-        const URLCategories = process.env.REACT_APP_API_URL+"/categories/"+game_id;
-        const responseCategories = await fetch(URLCategories);
+        const URL_categories = process.env.REACT_APP_API_URL+"/categories/"+game_id;
+        const responseCategories = await fetch(URL_categories);
         const dataCategories = await responseCategories.json();
         setCategories(dataCategories);
         setCategorySelected(dataCategories[0].id);
@@ -154,7 +154,6 @@ const CreateVideo = () => {
                     </Row>
                 </Form.Group>
 
-                
                 <hr></hr>
 
                 <Stack direction="horizontal" gap={3}>

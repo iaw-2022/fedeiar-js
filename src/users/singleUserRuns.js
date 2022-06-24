@@ -7,6 +7,8 @@ import { SecondsToTime } from "../utilities/util";
 
 const SingleUserRuns = () => {
 
+    // Parameters
+
     const { user_id } = useParams();
 
     // Hooks
@@ -78,7 +80,7 @@ const SingleUserRuns = () => {
 
     return(
         <div>
-            <h1 className="display-6 text-start">Runs</h1>
+            <h2 className="display-6 text-start mb-3"><strong>Runs</strong></h2>
 
             <DataTable
                 theme="dark"
@@ -86,7 +88,6 @@ const SingleUserRuns = () => {
                 data={userVideos}
                 pagination={userVideos.length > 10}
                 paginationComponentOptions={paginationComponentOptions}
-                dense
                 defaultSortFieldId={1}
                 responsive
             />

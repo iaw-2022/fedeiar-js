@@ -93,7 +93,7 @@ const EditVideo = (props) => {
             if(dataResponse.items.length == 0){
                 throw new Error();
             }
-        }catch(error){
+        } catch(error){
             handleShow();
             return;
         }

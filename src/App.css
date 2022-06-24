@@ -21,6 +21,10 @@ iframe, object, embed {
     max-width: 100%;
 }
 
+.dataTables_wrapper, .rdt_TableCell, .rdt_TableCol, .rdt_TableCell, .rdt_TableRow{
+    font-size:115%;
+  }
+
 /* .rdt_TableCol {
     background-color: #282c34;
     color:skyblue;

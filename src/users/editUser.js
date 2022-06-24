@@ -99,6 +99,7 @@ const EditUser = (props) => {
 
     return(
         <div>
+            
             <Header><h1 className="display-4">Edit your profile's information!</h1></Header>
 
             <Body>
