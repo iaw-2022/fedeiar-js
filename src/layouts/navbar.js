@@ -7,7 +7,7 @@ const NavigationBar = (props) => {
 
     // auth0
     
-    const {isAuthenticated, loginWithPopup, logout, user, getAccessTokenSilently} = useAuth0();
+    const {isAuthenticated, loginWithPopup, logout, getAccessTokenSilently} = useAuth0();
 
     // props
 
