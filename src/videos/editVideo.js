@@ -1,16 +1,20 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Row, Stack } from "react-bootstrap";
+import { Button, Col, Form, Row, Stack, Modal } from "react-bootstrap";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Header from "../layouts/header";
-import { SecondsToTimeToArray, TimeToSeconds } from "../utilities/util";
+import { parseYoutubeURL, SecondsToTimeToArray, TimeToSeconds } from "../utilities/util";
 
 
-const EditVideo = () => {
+const EditVideo = (props) => {
 
     // auth0
 
     const { isAuthenticated, getAccessTokenSilently } = useAuth0();
+
+    // props
+
+    let loggedUser = props.loggedUser;
 
     // Parameters
 
@@ -25,23 +29,37 @@ const EditVideo = () => {
     const [seconds, setSeconds] = useState('');
     
     const [categories, setCategories] = useState([]);
-    const [video, setVideos] = useState([]);
+    const [video, setVideo] = useState(null);
     const [isLoaded, setLoaded] = useState(false);
 
+    const [showModal, setShowModal] = useState(false);
+
     const navigate = useNavigate();
+
+    // Modal
+
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
 
     // Fetch
 
     const getDataFromAPI = async() => {
-        const URLCategories = process.env.REACT_APP_API_URL+"/categories/"+game_id;
-        const responseCategories = await fetch(URLCategories);
+        if(loggedUser == null){
+            return;
+        }
+        const URL_categories = process.env.REACT_APP_API_URL+"/categories/"+game_id;
+        const URL_video = process.env.REACT_APP_API_URL+"/videos/"+video_id;
+
+        let [responseCategories, responseVideo] = await Promise.all([
+            fetch(URL_categories),
+            fetch(URL_video)
+        ]);
+
         const dataCategories = await responseCategories.json();
         setCategories(dataCategories);
 
-        const URLVideo = process.env.REACT_APP_API_URL+"/videos/"+video_id;
-        const responseVideo = await fetch(URLVideo);
         const dataVideo = await responseVideo.json();
-        setVideos(dataVideo);
+        setVideo(dataVideo);
 
         setCategorySelected(dataVideo.category_id);
         setYoutubeURL(dataVideo.link_video);
@@ -55,12 +73,30 @@ const EditVideo = () => {
 
     useEffect(() => {
         getDataFromAPI();
-    }, []);
+    }, [loggedUser]);
 
     // Handle update
 
     const handleUpdate = async (e) => {
         e.preventDefault(); // Evita que se refresheen los campos después de dar submit.
+
+        try{
+            const youtube_id = parseYoutubeURL(youtubeURL);
+            if (youtube_id == null){
+                throw new Error();
+            }
+            const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${youtube_id}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`);
+            if(response.status != 200){
+                throw new Error();
+            }
+            const dataResponse = await response.json();
+            if(dataResponse.items.length == 0){
+                throw new Error();
+            }
+        } catch(error){
+            handleShow();
+            return;
+        }
         
         const video = {"game_id": game_id, "category_id": categorySelectedId, "link": youtubeURL, "time": TimeToSeconds(hours, minutes, seconds)};
         
@@ -84,7 +120,6 @@ const EditVideo = () => {
         } catch(error){
             console.log(error);
         }
-        
     }
 
     // Wait for data.
@@ -98,6 +133,12 @@ const EditVideo = () => {
     if(!isLoaded){
         return(
             <Header><h2 className="display-5">Loading...</h2></Header>
+        )
+    }
+
+    if(loggedUser.id != video.user_id){
+        return(
+            <h1 className="display-4 text-center">Editing other user's videos? Get out!</h1>
         )
     }
 
@@ -121,7 +162,7 @@ const EditVideo = () => {
                 <Form.Group className="mb-3">
                     <Form.Label>Enter youtube link video</Form.Label>
                     <Form.Control required type="url" value={youtubeURL} onChange={(e) => setYoutubeURL(e.target.value)} placeholder="youtube URL" />
-                    <Form.Text className="text-muted">
+                    <Form.Text className="text-white-50">
                         Important: it MUST be an URL ONLY from youtube, for example: https://www.youtube.com/watch?v=L4ZuuVG_QtM
                     </Form.Text>
                 </Form.Group>
@@ -130,18 +171,17 @@ const EditVideo = () => {
                     <Form.Label>Completion time</Form.Label>
                     <Row>
                         <Col>
-                            <Form.Control required type="number" value={hours} onChange={(e) => setHours(e.target.value)} placeholder="Hours"/>
+                            <Form.Control required type="number" min="0" max="9999" value={hours} onChange={(e) => setHours(e.target.value)} placeholder="Hours"/>
                         </Col>
                         <Col>
-                            <Form.Control required type="number" value={minutes} onChange={(e) => setMinutes(e.target.value)} placeholder="Minutes" />
+                            <Form.Control required type="number" min="0" max="59" value={minutes} onChange={(e) => setMinutes(e.target.value)} placeholder="Minutes" />
                         </Col>
                         <Col>
-                            <Form.Control required type="number" value={seconds} onChange={(e) => setSeconds(e.target.value)} placeholder="Seconds" />
+                            <Form.Control required type="number" min="0" max="59" value={seconds} onChange={(e) => setSeconds(e.target.value)} placeholder="Seconds" />
                         </Col>
                     </Row>
                 </Form.Group>
 
-                
                 <hr></hr>
 
                 <Stack direction="horizontal" gap={3}>
@@ -150,6 +190,18 @@ const EditVideo = () => {
                 </Stack>
 
             </Form>
+
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Error: invalid youtube link</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Use a valid youtube URL for an existing video.</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             
         </div>
     )

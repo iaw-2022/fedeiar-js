@@ -1,22 +1,22 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import { Button, Stack } from "react-bootstrap";
+import { Button, Stack, Modal, Container } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Body from "../layouts/body";
 import Header from "../layouts/header";
 import Loading from "../layouts/loading";
-import { SecondsToTime } from "../utilities/util";
+import { parseYoutubeURL, SecondsToTime } from "../utilities/util";
 
 
-const SingleVideo = () => {
+const SingleVideo = (props) => {
 
     // Parameters
 
     const { game_id, video_id } = useParams();
-
+    
     // auth0
 
-    const { isAuthenticated, getAccessTokenSilently, user } = useAuth0();
+    const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
     // Hooks
 
@@ -25,6 +25,13 @@ const SingleVideo = () => {
 
     const navigate = useNavigate();
 
+    const [showModal, setShowModal] = useState(false);
+
+    // Modal
+
+    const handleCloseModal = () => setShowModal(false);
+    const handleShowModal = () => setShowModal(true);
+
     // Fetch
 
     const getDataFromAPI = async() => {
@@ -32,7 +39,7 @@ const SingleVideo = () => {
         let response = await fetch(URL_video);
         const dataVideo = await response.json();
 
-        let youtube_id = parseYoutubeURL(dataVideo.link_video)
+        let youtube_id = parseYoutubeURL(dataVideo.link_video);
         dataVideo.link_video = "https://www.youtube.com/embed/"+youtube_id;
 
         setVideo(dataVideo);
@@ -45,7 +52,7 @@ const SingleVideo = () => {
 
     // Handle Delete
 
-    const handleDelete = async () => {
+    const handleVideoDelete = async () => {
         const token = await getAccessTokenSilently();
         try{
             const response = await fetch(process.env.REACT_APP_API_URL+"/videos/"+video_id, {
@@ -67,19 +74,20 @@ const SingleVideo = () => {
     }
 
     // Wait for data
-
+    
     if(!isLoaded){
         return(
             <Loading></Loading>
         )
     }
-
+    
     let updateDeleteButtons = null;
-    if(isAuthenticated){ // TODO: y tambien si el video le pertenece (para eso tendriamos que saber si el user_id asociado al video corresponde al del usuario logueado)
+    
+    if(isAuthenticated && props.loggedUser != null && props.loggedUser.id == video.user_id){
         updateDeleteButtons = (
             <Stack direction="horizontal" gap={3}>
                 <Link to={`/games/${game_id}/${video_id}/edit`}><Button variant="info">Edit video</Button></Link>
-                <Button onClick={handleDelete} variant="danger">Delete video</Button>
+                <Button onClick={handleShowModal} variant="danger">Delete video</Button>
             </Stack>
         );
     }
@@ -88,23 +96,25 @@ const SingleVideo = () => {
 
     return(
         <div>
+
             <Header><h2 className="display-5 text-start">{video.game_name}</h2></Header>
 
             <Body>
-                <div>
-                    <iframe
-                        src={video.link_video}
+                
+                <div className="mb-2">
+                    <object
+                        data={video.link_video}
                         frameBorder="0"
-                        allowFullScreen   
-                        width="640" 
+                        allowFullScreen
+                        width="640"
                         height="360"
                     />
                 </div>
-
+                
                 <div>
-                    <p className="text-start">Run done by: {video.user_name}</p>
-                    <p className="text-start">Category: {video.category_name}</p>
-                    <p className="text-start">Done in: {SecondsToTime(video.completion_time_seconds)}</p>
+                   <p className="text-start fs-5">Run done by: <strong><Link to={`/users/${video.user_id}`}>{video.user_name}</Link></strong></p>
+                    <p className="text-start fs-5">Category: <strong>{video.category_name}</strong></p>
+                    <p className="text-start fs-5">Done in: <strong>{SecondsToTime(video.completion_time_seconds)}</strong></p>
                 </div>
 
                 {updateDeleteButtons}
@@ -112,22 +122,29 @@ const SingleVideo = () => {
                 <hr></hr>
 
                 <Stack direction="horizontal" gap={3}>
-                    <Link to={`/games/${game_id}`}><Button variant="primary">Go to videos of the game</Button></Link>
-                    <Link to={`/users/${video.user_id}`}><Button variant="primary">Go to user's profile</Button></Link>
+                    <Link to={`/games/${game_id}`}><Button variant="primary">Videos of the game</Button></Link>
+                    <Link to={`/users/${video.user_id}`}><Button variant="primary">User's profile</Button></Link>
                 </Stack>
 
-                
             </Body>
+
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Danger zone: delete speedrun</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Are you sure you want to delete the speedrun?</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={handleCloseModal}>
+                        Close
+                    </Button>
+                    <Button variant="danger" onClick={handleVideoDelete}>
+                        Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
         </div>
     );
 }
 
-function parseYoutubeURL(URL){
-    let video_id = URL.split('v=')[1];
-    let ampersandPosition = video_id.indexOf('&');
-    if(ampersandPosition != -1) {
-        video_id = video_id.substring(0, ampersandPosition);
-    }
-    return video_id
-}
 export default SingleVideo;

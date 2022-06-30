@@ -9,10 +9,12 @@ import Body from "../layouts/body";
 const Users = () => {
 
     // Hooks
+
     const [users, setUsers] = useState([]);
     const [isLoaded, setLoaded] = useState(false);
 
     // Fetch
+
     const getDataFromAPI = async () => {
         const URL = process.env.REACT_APP_API_URL+"/users";
         const response = await fetch(URL);
@@ -56,14 +58,19 @@ const Users = () => {
         selectAllRowsItem: true,
     };
 
+    // Wait for data
+
     if(!isLoaded){
         return(
             <Header><h2 className="display-5">Loading...</h2></Header>
-        )
+        );
     }
+
+    // View
 
     return (
         <div>
+
             <Header><h1 className="display-3">Users</h1></Header>
 
             <Body>
@@ -73,17 +80,16 @@ const Users = () => {
                         theme="dark"
                         columns={columns}
                         data={users}
-                        pagination
+                        pagination={users.length > 10}
                         paginationComponentOptions={paginationComponentOptions}
                         dense
-                        // striped
                     />
                 </div>
 
             </Body>
             
         </div>
-    )
+    );
 }
 
 

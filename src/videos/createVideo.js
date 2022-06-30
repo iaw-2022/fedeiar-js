@@ -1,9 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Row, Stack } from "react-bootstrap";
+import { Button, Col, Form, Row, Stack, Modal } from "react-bootstrap";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Header from "../layouts/header";
-import { TimeToSeconds } from "../utilities/util";
+import { parseYoutubeURL, TimeToSeconds } from "../utilities/util";
 
 
 const CreateVideo = () => {
@@ -27,13 +27,20 @@ const CreateVideo = () => {
     const [categories, setCategories] = useState([]);
     const [isLoaded, setLoaded] = useState(false);
 
+    const [showModal, setShowModal] = useState(false);
+
     const navigate = useNavigate();
+
+    // Modal
+
+    const handleClose = () => setShowModal(false);
+    const handleShow = () => setShowModal(true);
 
     // Fetch
 
     const getDataFromAPI = async() => {
-        const URLCategories = process.env.REACT_APP_API_URL+"/categories/"+game_id;
-        const responseCategories = await fetch(URLCategories);
+        const URL_categories = process.env.REACT_APP_API_URL+"/categories/"+game_id;
+        const responseCategories = await fetch(URL_categories);
         const dataCategories = await responseCategories.json();
         setCategories(dataCategories);
         setCategorySelected(dataCategories[0].id);
@@ -49,6 +56,24 @@ const CreateVideo = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault(); // Evita que se refresheen los campos después de dar submit.
+        
+        try{
+            const youtube_id = parseYoutubeURL(youtubeURL);
+            if (youtube_id == null){
+                throw new Error();
+            }
+            const response = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${youtube_id}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`);
+            if(response.status != 200){
+                throw new Error();
+            }
+            const dataResponse = await response.json();
+            if(dataResponse.items.length == 0){
+                throw new Error();
+            }
+        }catch(error){
+            handleShow();
+            return;
+        }
         
         const video = {"game_id": game_id, "category_id": categorySelectedId, "link": youtubeURL, "time": TimeToSeconds(hours, minutes, seconds)};
         
@@ -109,7 +134,7 @@ const CreateVideo = () => {
                 <Form.Group className="mb-3">
                     <Form.Label>Enter youtube link video</Form.Label>
                     <Form.Control required type="url" value={youtubeURL} onChange={(e) => setYoutubeURL(e.target.value)} placeholder="youtube URL" />
-                    <Form.Text className="text-muted">
+                    <Form.Text className="text-white-50">
                         Important: it MUST be an URL ONLY from youtube, for example: https://www.youtube.com/watch?v=L4ZuuVG_QtM
                     </Form.Text>
                 </Form.Group>
@@ -118,18 +143,17 @@ const CreateVideo = () => {
                     <Form.Label>Completion time</Form.Label>
                     <Row>
                         <Col>
-                            <Form.Control required type="number" value={hours} onChange={(e) => setHours(e.target.value)} placeholder="Hours"/>
+                            <Form.Control required type="number" min="0" max="9999" value={hours} onChange={(e) => setHours(e.target.value)} placeholder="Hours"/>
                         </Col>
                         <Col>
-                            <Form.Control required type="number" value={minutes} onChange={(e) => setMinutes(e.target.value)} placeholder="Minutes" />
+                            <Form.Control required type="number" min="0" max="59" value={minutes} onChange={(e) => setMinutes(e.target.value)} placeholder="Minutes" />
                         </Col>
                         <Col>
-                            <Form.Control required type="number" value={seconds} onChange={(e) => setSeconds(e.target.value)} placeholder="Seconds" />
+                            <Form.Control required type="number" min="0" max="59" value={seconds} onChange={(e) => setSeconds(e.target.value)} placeholder="Seconds" />
                         </Col>
                     </Row>
                 </Form.Group>
 
-                
                 <hr></hr>
 
                 <Stack direction="horizontal" gap={3}>
@@ -138,6 +162,18 @@ const CreateVideo = () => {
                 </Stack>
 
             </Form>
+
+            <Modal show={showModal} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Error: invalid youtube link</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Use a valid youtube URL for an existing video.</Modal.Body>
+                <Modal.Footer>
+                    <Button variant="danger" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
             
         </div>
     )

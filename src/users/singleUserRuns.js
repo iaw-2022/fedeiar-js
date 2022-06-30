@@ -7,6 +7,8 @@ import { SecondsToTime } from "../utilities/util";
 
 const SingleUserRuns = () => {
 
+    // Parameters
+
     const { user_id } = useParams();
 
     // Hooks
@@ -39,7 +41,6 @@ const SingleUserRuns = () => {
         {
             name: "Category",
             selector: row => row.category_name,
-            hide: "sm",
             hide: "md"
         },
         {
@@ -48,13 +49,11 @@ const SingleUserRuns = () => {
             cell: (video) => (
                 SecondsToTime(video.completion_time_seconds)
             ),
-            hide: "sm",
             hide: "md"
         },
         {
             name: "Date",
             selector: row => new Date(row.created_at).toLocaleDateString({day: '2-digit', month: '2-digit', year: 'numeric'}),
-            hide: "sm",
             hide: "md"
         },
         {
@@ -81,18 +80,16 @@ const SingleUserRuns = () => {
 
     return(
         <div>
-            <h1 className="display-6 text-start">Runs</h1>
+            <h2 className="display-6 text-start mb-3"><strong>Runs</strong></h2>
 
             <DataTable
                 theme="dark"
                 columns={columns}
                 data={userVideos}
-                pagination
+                pagination={userVideos.length > 10}
                 paginationComponentOptions={paginationComponentOptions}
-                dense
-                defaultSortFieldId={5}
+                defaultSortFieldId={1}
                 responsive
-                // striped
             />
         </div>
     );
